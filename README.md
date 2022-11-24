@@ -3,6 +3,8 @@ Build your own customized Windows desktop menu.  Unlimited submenus with unlimit
 
 Many, many exciting features. And it's all free. (see the Wiki for a quick preview)
 
-Wiki-writing is about to commence, in conjunction with more beta-testing, completing functionality, and deciding on a v1 release date.
+Wiki-writing has commenced, in conjunction with more beta-testing, completing functionality, and deciding on a v0.9 [pre-]release date.
+
+See the Wiki overview (and screenshots) at https://github.com/BazzaCuda/CustomMenu/wiki/Overview
 
 Stay tuned.
