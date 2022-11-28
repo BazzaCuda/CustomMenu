@@ -7,4 +7,4 @@ Wiki-writing has commenced, in conjunction with more beta-testing, completing fu
 
 See the Wiki overview (and screenshots) at https://github.com/BazzaCuda/CustomMenu/wiki/Overview
 
-Stay tuned.
+Follow and stay tuned for updates.
