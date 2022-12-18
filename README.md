@@ -1,6 +1,7 @@
 # CustomMenu
 Build your own customized Windows desktop menu.  Unlimited submenus with unlimited menu items.
-All your favorite applications, folders, Windows settings and Windows applets at your fingertips and easily accessed just by right-clicking on your desktop.
+
+All your favorite applications, folders, Windows settings and Windows applets at your fingertips and easily accessible just by right-clicking on your desktop.
 
 Many, many exciting features. And it's all free. (see the Wiki for a quick preview)
 
