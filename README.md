@@ -3,6 +3,8 @@ Build your own customized Windows desktop menu.  Unlimited submenus with unlimit
 
 All your favorite applications, folders, Windows settings and Windows applets at your fingertips and easily accessible just by right-clicking on your desktop.
 
+A great alternative to the nightmarish clutter of your Windows Start Menu or even your current desktop context menu.
+
 Many, many exciting features. And it's all free. (see the Wiki for a quick preview)
 
 Wiki-writing has commenced, in conjunction with more beta-testing, completing functionality, and deciding on a v0.9 [pre-]release date.
