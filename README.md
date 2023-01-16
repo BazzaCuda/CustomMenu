@@ -1,6 +1,6 @@
 # CustomMenu
 
-NOW AVAILABLE FOR DOWNLOAD!
+NOW AVAILABLE FOR DOWNLOAD! (see https://github.com/BazzaCuda/CustomMenu/releases)
 
 Build your own customized Windows desktop menu.  Unlimited submenus with unlimited menu items.
 
