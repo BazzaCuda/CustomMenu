@@ -12,9 +12,6 @@ Many, many exciting features. And it's all free. (see the Wiki for a quick previ
 
 Once CustomMenu contains all the functionality that it's likely to have (based on user feedback), the source code will be released. 
 
-Wiki-writing has commenced, in conjunction with more beta-testing, completing functionality, and deciding on a v0.9 [pre-]release date.
-(Breaking News: CustomMenu is now available to download - see https://github.com/BazzaCuda/CustomMenu/wiki/Getting-Started)
-
 See the Wiki overview (and screenshots) at https://github.com/BazzaCuda/CustomMenu/wiki/Overview
 
 Follow and stay tuned for updates.
