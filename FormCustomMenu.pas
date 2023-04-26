@@ -312,7 +312,7 @@ var
   end;
 
 begin
-  case GREFRESH of TRUE: iniFile := NIL; end; // user did Alt-RightClick on desktop to force reload of the ini file
+  case GREFRESH and (iniFile <> NIL) of TRUE: begin iniFile.free; iniFile := NIL; end;end; // user did Alt-RightClick on desktop to force reload of the ini file
   case (iniFile = NIL) and (not fileExists(iniFilePath)) of TRUE: begin result := FALSE; EXIT; end;end;
   case iniFile = NIL of TRUE: iniFile := TStringList.create; end;
   subMenuName := lowerCase(subMenuName); // so that subMenuName comparison isn't case sensitive
