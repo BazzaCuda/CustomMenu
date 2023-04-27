@@ -78,6 +78,7 @@ releases/
 release*/
 docs*/
 samplemenu*/
+custommenu_release*/
 
 # personal
 baz.ico
