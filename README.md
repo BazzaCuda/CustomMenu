@@ -6,15 +6,17 @@ Build your own customized Windows desktop menu.  Unlimited submenus with unlimit
 
 All your favorite applications, folders, Windows settings and Windows applets at your fingertips and easily accessible just by right-clicking on your desktop.
 
-A great alternative to the nightmarish clutter of your Windows Start Menu or even your current desktop context menu.
+A great alternative to the nightmarish clutter of your Windows Start Menu or even your current Windows desktop context menu.
+
+Great for PC Support technicians! Configure and run from a USB stick containing all your favorite tools.
 
 Many, many exciting features. And it's all free. (see the Wiki for a quick preview).
-
-Once CustomMenu contains all the functionality that it's likely to have (based on user feedback), the source code will be released. 
 
 See the Wiki overview (and screenshots) at https://github.com/BazzaCuda/CustomMenu/wiki/Overview
 
 Follow and stay tuned for updates.
+
+Comments and suggestions always welcome in https://github.com/BazzaCuda/CustomMenu/discussions
 
 Examples:
 
