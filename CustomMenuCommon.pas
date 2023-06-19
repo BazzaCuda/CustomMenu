@@ -49,6 +49,7 @@ type
 
 const
   CM_APP_NAME         = 'Custom Menu';
+  CM_APP_VERSION      = 'v1.0.1';
   CM_BACKGROUND_COLOR = $2B2B2B;
   CM_HIGHLIGHT_COLOR  = $484848;
   CM_ITEM_HEIGHT      = 22;
@@ -76,6 +77,7 @@ function expandPathRelToBaseDir(const filePath: string; baseDir: string): string
 function findCustomMenu: boolean;
 function getExePath: string;
 function getFileNameWithoutExt(filename: string): string;
+function getFileVersion(const aFilePath: string = ''; const fmt: string = '%d.%d.%d.%d'): string;
 function getINIFileName: string;
 function getParamXY: TPoint;
 function iconFileFromIconEntry(iconEntry: string): string;
@@ -267,6 +269,47 @@ function getFileNameWithoutExt(filename: string): string;
 begin
   var vExt  := extractFileExt(filename);
   result    := copy(extractFileName(filename), 1, length(extractFileName(filename)) - length(vExt));
+end;
+
+function getFileVersion(const aFilePath: string = ''; const fmt: string = '%d.%d.%d.%d'): string;
+var
+  vFilePath: string;
+  iBufferSize: DWORD;
+  iDummy: DWORD;
+  pBuffer: Pointer;
+  pFileInfo: Pointer;
+  iVer: array[1..4] of Word;
+begin
+  // set default value
+  Result := '';
+  // get filename of exe/dll if no filename is specified
+  vFilePath := aFilePath;
+  case vFilePath = '' of TRUE:  begin
+                                  // prepare buffer for path and terminating #0
+                                  SetLength(vFilePath, MAX_PATH + 1);
+                                  SetLength(vFilePath, GetModuleFileName(hInstance, PChar(vFilePath), MAX_PATH + 1));
+                                end;end;
+
+  // get size of version info (0 if no version info exists)
+  iBufferSize := GetFileVersionInfoSize(PChar(vFilePath), iDummy);
+
+  case iBufferSize > 0 of TRUE:   begin
+                                    GetMem(pBuffer, iBufferSize);
+                                    try
+                                      // get fixed file info (language independent)
+                                      GetFileVersionInfo(PChar(vFilePath), 0, iBufferSize, pBuffer);
+                                      VerQueryValue(pBuffer, '\', pFileInfo, iDummy);
+                                      // read version blocks
+                                      iVer[1] := HiWord(PVSFixedFileInfo(pFileInfo)^.dwFileVersionMS);
+                                      iVer[2] := LoWord(PVSFixedFileInfo(pFileInfo)^.dwFileVersionMS);
+                                      iVer[3] := HiWord(PVSFixedFileInfo(pFileInfo)^.dwFileVersionLS);
+                                      iVer[4] := LoWord(PVSFixedFileInfo(pFileInfo)^.dwFileVersionLS);
+                                    finally
+                                      FreeMem(pBuffer);
+                                    end;
+                                    // format result string
+                                    Result := Format(Fmt, [iVer[1], iVer[2], iVer[3], iVer[4]]);
+                                  end;end;
 end;
 
 function getINIFileName: string;

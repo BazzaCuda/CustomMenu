@@ -22,8 +22,8 @@ program CustomMenu;
 {$M-} // enables the published keyword
 uses
   Vcl.Forms,
-  Vcl.Styles,
-  Vcl.Themes,
+//  Vcl.Styles,
+//  Vcl.Themes,
   FormCustomMenu in 'FormCustomMenu.pas' {CustomMenu},
   Winapi.Hooks in 'Winapi.Hooks.pas',
   CustomMenuCommon in 'CustomMenuCommon.pas',

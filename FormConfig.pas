@@ -401,7 +401,7 @@ end;
 //========== FORM FUNCTIONS ==========
 function TConfigForm.getCleanCaption: string;
 begin
-  result := getINIFileName + ' - ' + CM_APP_NAME;
+  result := getINIFileName + ' - ' + CM_APP_NAME + ' ' + getFileVersion('', 'v%d.%d.%d');
   case isRunningAsAdmin of TRUE: result := result + ' [Admin]'; end;
 end;
 
