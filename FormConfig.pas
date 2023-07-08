@@ -427,7 +427,7 @@ end;
 
 procedure TConfigForm.lblFeedbackClick(Sender: TObject);
 begin
-  shellExecute(0, 'open', 'https://github.com/BazzaCuda/CustomMenu/discussions/4', '', '', SW_SHOW);
+  shellExecute(0, 'open', 'https://github.com/BazzaCuda/CustomMenu/discussions/', '', '', SW_SHOW);
 end;
 
 procedure TConfigForm.lblHelpClick(Sender: TObject);
