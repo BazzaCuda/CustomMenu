@@ -163,6 +163,7 @@ type
     FTreeClick:     boolean;
     FDragDescriptionFormat: cardinal;
     function  actionThisIcon(iconFile: string; iconIx: integer): boolean;
+    function  capitalize(const aString: string): string;
     function  checkIfStillSubMenu(aNode: PVirtualNode): boolean;
     function  checkNodeParentage: boolean;
     function  checkSaves: boolean;
@@ -201,7 +202,7 @@ function enableConfigForm: boolean;
 implementation
 
 uses _debugWindow, VirtualTrees.Types, WinAPI.ShellAPI, system.win.comobj, FormIconExplorer, FormCustomMenu, System.Win.Registry, winShell, runElevatedSupport,
-     shellFoldersDef, mmcDef, mmcServerDef, cpl1Def, cpl2Def, runDll32Def, msSettingsDef, shellGuidsDef;
+     shellFoldersDef, mmcDef, mmcServerDef, cpl1Def, cpl2Def, runDll32Def, msSettingsDef, shellGuidsDef, system.strUtils;
 
 var configForm: TConfigForm;
     FCurrentIx: integer = -1; // when loading all the data and the icons, FCurrentIx and all "for i" loop variables will match for all the
@@ -440,7 +441,7 @@ begin
   case trim(cmdFilePath) = '' of TRUE: EXIT; end;
   var vExt := lowerCase(extractFileExt(cmdFilePath));
   case (trim(editIconFile.text) = '') of TRUE: editIconFile.text := cmdFilePath; end;
-  case (trim(editName.text) = '') or (editName.text = CM_NEW_ITEM_NAME) of TRUE: editName.text := getFileNameWithoutExt(cmdFilePath); end;
+  case (trim(editName.text) = '') or (editName.text = CM_NEW_ITEM_NAME) of TRUE: editName.text := capitalize(getFileNameWithoutExt(cmdFilePath)); end;
   case (trim(editDirectory.text) = '') of TRUE: editDirectory.text := includeTrailingBackslash(extractFilePath(cmdFilePath)); end;
   case editDirectory.text = '\' of TRUE: editDirectory.text := ''; end;
 end;
@@ -1517,6 +1518,7 @@ end;
 
 procedure TConfigForm.editCommandChange(Sender: TObject);
 begin
+  editCommand.text := replaceStr(editCommand.text, '"', '');
   var sel: PVirtualNode := vst.getFirstSelected;
   case sel = NIL of TRUE: EXIT; end;
   var id: PItemData := sel.getData;
@@ -1614,6 +1616,13 @@ begin
   {both of these calls should really be elsewhere}
   populateBoxesFromItemData(id1);
   updateMenuIcon;
+end;
+
+function TConfigForm.capitalize(const aString: string): string;
+begin
+  result := aString;
+  case length(result) > 0 of FALSE: EXIT; end;
+  result[1] := upCase(result[1]);
 end;
 
 function TConfigForm.checkIfStillSubMenu(aNode: PVirtualNode): boolean;
