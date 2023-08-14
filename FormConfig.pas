@@ -473,7 +473,7 @@ var
 begin
   getShellLinkInfo(lnkFilePath, linkInfo);
 
-  case (trim(editName.text) = '') or (editName.text = CM_NEW_ITEM_NAME) of TRUE: editName.text := getFileNameWithoutExt(lnkFilePath); end;
+  case (trim(editName.text) = '') or (editName.text = CM_NEW_ITEM_NAME) of TRUE: editName.text := capitalize(getFileNameWithoutExt(lnkFilePath)); end;
   case (linkInfo.params  = '') of FALSE: begin editParams.text := linkInfo.params; end;end;
 
   case isShiftKeyDown of TRUE: begin    // get relative paths to everything;
