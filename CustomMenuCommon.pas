@@ -537,7 +537,7 @@ end;
 
 function isShiftKeyDown: boolean;
 begin
-  result := (getKeyState(VK_SHIFT) AND $80) <> 0;
+  result := getKeyState(VK_SHIFT) < 0;
 end;
 
 initialization

@@ -647,7 +647,8 @@ begin
     begin
       HookMsg.Result := 0;                                                                              // default to not handling other windows' mouses. It's just rude!
 
-      case (GetKeyState(VK_CONTROL) AND $80) <> 0 of TRUE: EXIT; end;                                   // Ctrl-RightClick will access the windows context menu
+//      case (GetKeyState(VK_CONTROL) AND $80) <> 0 of TRUE: EXIT; end;                                   // Ctrl-RightClick will access the windows context menu
+      case (GetKeyState(VK_CONTROL) < 0) of TRUE: EXIT; end;                                            // Ctrl-RightClick will access the windows context menu
       LLMouseHook := TLowLevelMouseHook(Hook);
 
       case (HookMsg.msg = WM_MOUSEMOVE) or (HookMsg.Msg = WM_MOUSEWHEEL) of TRUE: EXIT; end;            // only interested in clicks
@@ -668,8 +669,8 @@ begin
       isRButton   := (HookMsg.msg = WM_RBUTTONDOWN) OR (HookMsg.msg = WM_RBUTTONUP);                    // click or release of right mouse button?
       isRButtonUp := (HookMsg.msg = WM_RBUTTONUP);                                                      // release of right mouse button?
       case isDesktop and isRButton of TRUE: HookMsg.Result := 1; end;                                   // trap every click and release of the right mouse button on the desktop
-      case isDesktop and isRButtonUp and ((GetKeyState(VK_SHIFT) AND $80) <> 0) of TRUE: closeApp; end;           // SHIFT-rightclick on desktop closes this app
-      case isDesktop and isRButtonUp and ((GetKeyState(VK_MENU) AND $80) <> 0) of TRUE: GREFRESH := TRUE; end;    // ALT-rightclick on desktop refreshes all menu data when the next statement executes
+      case isDesktop and isRButtonUp and (GetKeyState(VK_SHIFT) < 0) of TRUE: closeApp; end;            // SHIFT-rightclick on desktop closes this app
+      case isDesktop and isRButtonUp and (GetKeyState(VK_MENU)  < 0) of TRUE: GREFRESH := TRUE; end;    // ALT-rightclick on desktop refreshes all menu data when the next statement executes
       case isDesktop and isRButtonUp of TRUE: MenuTimer.Enabled := TRUE; end;                           // right-click release on desktop, show main menu
     end;
 
