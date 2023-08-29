@@ -56,6 +56,7 @@ const
   CM_INI_FILE_NAME    = 'CustomMenu.ini';
   CM_NEW_ITEM_NAME    = 'New Menu Item';
   CM_REGISTRY_KEY     = 'SOFTWARE\Classes\DesktopBackground\shell';         // don't add the trailing \
+  CM_CTRL_FILE_NAME   = 'ctrl-click';
 
   IL2_CHEVRON   = 0;
   IL2_LUASHIELD = 1;
@@ -65,6 +66,7 @@ const
   WM_XY_MESSAGE = WM_APP + 0;
 
 function alreadyRunning: boolean;
+function ctrlClickToActivate: boolean;
 function copyIcons(src: TImageList; dst: TImageList): boolean;
 function createMiniIni: boolean;
 function customMenuWnd: HWND;
@@ -132,6 +134,11 @@ end;
 function alreadyRunning: boolean;
 begin
   result := processExists('CustomMenu.exe') > 0;
+end;
+
+function ctrlClickToActivate: boolean;
+begin
+  result := fileExists(getExePath + CM_CTRL_FILE_NAME);
 end;
 
 function createMiniIni: boolean;

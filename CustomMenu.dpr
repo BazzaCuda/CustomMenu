@@ -58,5 +58,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := TRUE;
   Application.CreateForm(TCustomMenu, mainMenu);
+  mainMenu.ctrlClickActivate := ctrlClickToActivate;
   Application.Run;
 end.

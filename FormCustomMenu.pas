@@ -77,6 +77,8 @@ type
 
     FListBoxWndProc: TWndMethod;
 
+    FCtrlClickActivate: boolean;
+
     var FOldHintIx: integer;
     procedure listBoxWndProc(var Msg: TMessage);
 
@@ -95,6 +97,7 @@ type
     procedure CreateParams(var Params: TCreateParams); override;
   public
     function shutMenus: boolean;
+    property ctrlClickActivate: boolean read FCtrlClickActivate write FCtrlClickActivate;
     property Hook: THook read FHook;
     property Pt: TPoint read FPt write FPt;
   end;
@@ -628,8 +631,25 @@ begin
   listBox.WindowProc  := listBoxWndProc;      // subclass to suppress horizontal and vertical scrollbars - see listBoxWndProc
 end;
 
+var hProgman: HWND;
+    hWorkerW: HWND;
+    hDefView: HWND;
+    hDesktop: HWND;
+
+function findDefView(Handle: HWND; Temp: LongInt): BOOL; stdcall; // find DefView as a child of progman
+begin
+  hDefView := FindWindowEx(handle, 0, 'SHELLDLL_DefView', '');
+  result   := hDefView = 0;  // TRUE = continue, FALSE = stop
+end;
+
+function findWorkerW(Handle: HWND; Temp: LongInt): BOOL; stdcall; // find DefView as a child of a WorkerW child window
+begin
+  hWorkerW := FindWindowEx(handle, 0, 'WorkerW', '');
+  case hWorkerW <> 0 of TRUE: begin hDefView := findWindowEx(hWorkerW, 0, 'SHELLDLL_DefView', '');
+                                    result   := hDefView = 0; end;end; // TRUE = continue, FALSE = stop
+end;
+
 function TCustomMenu.setMouseTrap: boolean;
-var hDesktop: HWND;
 begin
   case menuID <> 0 of TRUE: begin debug('Tried to create a mouse trap in a submenu'); EXIT; end;end;
   case FHook <> NIL of TRUE: begin debug('Tried to create a second mouse trap in the main menu'); EXIT; end;end;
@@ -647,8 +667,8 @@ begin
     begin
       HookMsg.Result := 0;                                                                              // default to not handling other windows' mouses. It's just rude!
 
-//      case (GetKeyState(VK_CONTROL) AND $80) <> 0 of TRUE: EXIT; end;                                   // Ctrl-RightClick will access the windows context menu
-      case (GetKeyState(VK_CONTROL) < 0) of TRUE: EXIT; end;                                            // Ctrl-RightClick will access the windows context menu
+      case FCtrlClickActivate and NOT (GetKeyState(VK_CONTROL) < 0) of TRUE: EXIT; end;
+      case NOT FCtrlClickActivate and (GetKeyState(VK_CONTROL) < 0) of TRUE: EXIT; end;
       LLMouseHook := TLowLevelMouseHook(Hook);
 
       case (HookMsg.msg = WM_MOUSEMOVE) or (HookMsg.Msg = WM_MOUSEWHEEL) of TRUE: EXIT; end;            // only interested in clicks
@@ -656,6 +676,7 @@ begin
                                                                                                         // if we add more menu options to the systray icon, this will need to be revisited.
 
       mouseWnd      := WindowFromPoint(LLMouseHook.HookStruct.Pt);                                      // get the window this mouse message is for
+//      debugInteger('mouseWnd', mouseWnd);
       isDesktop     := mouseWnd = hDesktop;                                                             // is it the desktop?
       isMenuWnd     := menuWnd(MouseWnd);                                                               // is it one of our menus?
 
@@ -674,9 +695,23 @@ begin
       case isDesktop and isRButtonUp of TRUE: MenuTimer.Enabled := TRUE; end;                           // right-click release on desktop, show main menu
     end;
 
-    var hProgman: HWND  := FindWindow('Progman', 'Program Manager');
-    var hDefView: HWND  := FindWindowEx(hProgman, 0, 'SHELLDLL_DefView', '');
-    hDesktop            := FindWindowEx(hDefView, 0, 'SysListView32', 'FolderView');
+//    hDefView := FindWindowEx(hProgman, 0, 'SHELLDLL_DefView', '');
+//    case hDefView = 0 of TRUE: begin hWorkerW := findWindowEx(hProgman, 0, 'WorkerW', '');
+//                                     hDefView := FindWindowEx(hWorkerW, 0, 'SHELLDLL_DefView', ''); end;end;
+
+//    debug('Mouse Test 2');
+
+    hProgman := FindWindow('Progman', 'Program Manager');
+    hDefView := FindWindowEx(hProgman, 0, 'SHELLDLL_DefView', '');
+    case hDefView = 0 of TRUE: enumWindows(@findDefView, 0); end;
+    case hDefView = 0 of TRUE: enumWindows(@findWorkerW, 0); end;
+    case hDefView = 0 of TRUE: debug('Can''t find the DefView window'); end;
+    hDesktop := FindWindowEx(hDefView, 0, 'SysListView32', 'FolderView');
+
+//    debugInteger('hProgman', hProgman);
+//    debugInteger('hDefView', hDefView);
+//    debugInteger('hWorkerW', hWorkerW);
+//    debugInteger('hDesktop', hDesktop);
 
     FHook.Active := TRUE;
 end;
