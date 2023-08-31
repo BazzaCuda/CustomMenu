@@ -677,7 +677,7 @@ begin
 
       mouseWnd      := WindowFromPoint(LLMouseHook.HookStruct.Pt);                                      // get the window this mouse message is for
 //      debugInteger('mouseWnd', mouseWnd);
-      isDesktop     := mouseWnd = hDesktop;                                                             // is it the desktop?
+      isDesktop     := (mouseWnd = hDesktop) or (mouseWnd = hDefView);                                  // is it the desktop?
       isMenuWnd     := menuWnd(MouseWnd);                                                               // is it one of our menus?
 
       // ignore mouse wheel and middle button clicks for now. We're only interested in left and right button clicks and releases.
@@ -705,7 +705,7 @@ begin
     hDefView := FindWindowEx(hProgman, 0, 'SHELLDLL_DefView', '');
     case hDefView = 0 of TRUE: enumWindows(@findDefView, 0); end;
     case hDefView = 0 of TRUE: enumWindows(@findWorkerW, 0); end;
-    case hDefView = 0 of TRUE: debug('Can''t find the DefView window'); end;
+    case hDefView = 0 of TRUE: raise exception.create('Can''t find the DefView window - please raise an issue on Github'); end;
     hDesktop := FindWindowEx(hDefView, 0, 'SysListView32', 'FolderView');
 
 //    debugInteger('hProgman', hProgman);

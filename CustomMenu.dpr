@@ -44,7 +44,7 @@ uses
 {$R *.res}
 
 begin
-  ReportMemoryLeaksOnShutdown := TRUE;
+//  ReportMemoryLeaksOnShutdown := TRUE;
 
   case hasParamSingle and alreadyRunning of TRUE: begin
                                                     case hasParamShowMenu of TRUE: findCustomMenu; end;

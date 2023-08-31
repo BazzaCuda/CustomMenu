@@ -2572,11 +2572,11 @@ object ConfigForm: TConfigForm
         ParentFont = False
       end
       object lblSelectFromExeDLLetc: TLabel
-        Left = 187
+        Left = 140
         Top = 209
-        Width = 173
+        Width = 219
         Height = 17
-        Caption = 'Select icon from a DLL or EXE'
+        Caption = 'Select icon from a DLL / EXE / ICL etc.'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
         Font.Height = -13

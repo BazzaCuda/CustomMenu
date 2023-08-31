@@ -2105,6 +2105,7 @@ object IconExplorerForm: TIconExplorerForm
           Items.Strings = (
             'DLLs, EXEs, CPLs (*.dll,*.exe,*.cpl)'
             'DRVs, OCXs (*.drv,*.ocx)'
+            'Icon Libraries (*.icl)'
             'All Files (*.*)')
         end
       end
