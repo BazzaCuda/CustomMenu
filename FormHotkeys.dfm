@@ -40,14 +40,19 @@ object HotkeyForm: THotkeyForm
     Modifiers = []
     TabOrder = 0
   end
-  object btnOK: TButton
-    Left = 116
-    Top = 105
-    Width = 75
-    Height = 25
+  object pnlOK: TPanel
+    Left = 114
+    Top = 94
+    Width = 78
+    Height = 27
     Caption = 'OK'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clSilver
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 1
-    TabStop = False
-    OnClick = btnOKClick
+    OnClick = pnlOKClick
   end
 end

@@ -4,14 +4,15 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
+  Vcl.ExtCtrls;
 
 type
   THotkeyForm = class(TForm)
     hkHotkey: THotKey;
     Label1: TLabel;
-    btnOK: TButton;
-    procedure btnOKClick(Sender: TObject);
+    pnlOK: TPanel;
+    procedure pnlOKClick(Sender: TObject);
   private
   public
     property hotKey: THotKey read hkHotKey;
@@ -96,7 +97,7 @@ begin
   end;
 end;
 
-procedure THotkeyForm.btnOKClick(Sender: TObject);
+procedure THotkeyForm.pnlOKClick(Sender: TObject);
 begin
   saveHotkey(registerHotkey(hotkey.hotkey));
   modalResult := mrOK;
