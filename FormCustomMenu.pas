@@ -93,7 +93,7 @@ type
     function  setMouseTrap: boolean;
     function  shutForm: boolean;
     function  shutSubMenu(ownerItemID: integer = -1): boolean;
-    procedure WMXYMessage(var Msg: TMessage); message WM_XY_MESSAGE;
+//    procedure WMXYMessage(var Msg: TMessage); message WM_XY_MESSAGE;
   protected
     procedure CreateParams(var Params: TCreateParams); override;
   public
@@ -687,7 +687,7 @@ begin
       case isButtonClick and NOT isMenuWnd of TRUE: shutMenus; end;                                     // if it's not for an existing menu, any click closes all existing menus (Mouse movement is ok, but not clicks)
       case isDesktop or isMenuWnd of FALSE: EXIT; end;                                                  // Is mouse click for the desktop or one of our menus? If not, ignore it.
 
-      FPT         :=  LLMouseHook.HookStruct.Pt;                                                        // screen coords of mouse click
+      FPT :=  LLMouseHook.HookStruct.Pt;                                                                // screen coords of mouse click
       isRButton   := (HookMsg.msg = WM_RBUTTONDOWN) OR (HookMsg.msg = WM_RBUTTONUP);                    // click or release of right mouse button?
       isRButtonUp := (HookMsg.msg = WM_RBUTTONUP);                                                      // release of right mouse button?
       case isDesktop and isRButton of TRUE: HookMsg.Result := 1; end;                                   // trap every click and release of the right mouse button on the desktop
@@ -951,6 +951,8 @@ end;
 
 procedure TCustomMenu.WMHotKey(var Msg: TWMHotKey);
 begin
+  FPT.X := (getscreenWidth - (width div 2)) div 2;
+  FPT.Y := 20;
   menuTimer.enabled := hotkeyEnabled and (msg.HotKey = hotkeyAtom);
 end;
 
@@ -974,16 +976,16 @@ begin
   DeleteObject(Pen);
   ReleaseDC(Handle, Canvas.Handle);
 end;
-
-procedure TCustomMenu.WMXYMessage(var Msg: TMessage);
-var vPt: TPoint;
-begin
-  debug('hello');
-  vPt.X := msg.WParam;
-  vPt.Y := msg.LParam;
-  Pt := vPt;
-  buildAndShowTheMenu;
-end;
+//
+//procedure TCustomMenu.WMXYMessage(var Msg: TMessage);
+//var vPt: TPoint;
+//begin
+//  debug('hello');
+//  vPt.X := msg.WParam;
+//  vPt.Y := msg.LParam;
+//  Pt := vPt;
+//  buildAndShowTheMenu;
+//end;
 
 { TListBox }
 

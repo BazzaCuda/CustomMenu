@@ -82,6 +82,8 @@ function getFileNameWithoutExt(filename: string): string;
 function getFileVersion(const aFilePath: string = ''; const fmt: string = '%d.%d.%d.%d'): string;
 function getINIFileName: string;
 function getParamXY: TPoint;
+function getScreenHeight: integer;
+function getScreenWidth: integer;
 function iconFileFromIconEntry(iconEntry: string): string;
 function itemDataClear(var itemData: TList<TItemData>): boolean;
 function iconIxFromIconEntry(iconEntry: string): integer;
