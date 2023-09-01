@@ -22,8 +22,6 @@ program CustomMenu;
 {$M-} // enables the published keyword
 uses
   Vcl.Forms,
-//  Vcl.Styles,
-//  Vcl.Themes,
   FormCustomMenu in 'FormCustomMenu.pas' {CustomMenu},
   Winapi.Hooks in 'Winapi.Hooks.pas',
   CustomMenuCommon in 'CustomMenuCommon.pas',
@@ -39,7 +37,8 @@ uses
   cpl2Def in 'cpl2Def.pas',
   rundll32Def in 'rundll32Def.pas',
   msSettingsDef in 'msSettingsDef.pas',
-  shellGuidsDef in 'shellGuidsDef.pas';
+  shellGuidsDef in 'shellGuidsDef.pas',
+  FormHotkeys in 'FormHotkeys.pas' {HotkeyForm};
 
 {$R *.res}
 

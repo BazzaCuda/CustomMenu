@@ -83,6 +83,7 @@ type
     procedure listBoxWndProc(var Msg: TMessage);
 
     procedure WMNCPaint(var Msg: TWMNCPaint); message WM_NCPAINT;
+    procedure WMHotKey(var Msg : TWMHotKey); message WM_HOTKEY;
 
     function  buildAndShowTheMenu: boolean;
     function  buildMenu(menuType: TMenuType; extraInfo: array of string): boolean;
@@ -110,7 +111,7 @@ var
 
 implementation
 
-uses System.win.Registry, ShellAPI, WinAPI.CommCtrl, FormConfig, _debugWindow, system.types;
+uses System.win.Registry, ShellAPI, WinAPI.CommCtrl, FormConfig, system.types, FormHotkeys, _debugWindow;
 
 var
   GFIRST:     boolean;
@@ -676,7 +677,7 @@ begin
                                                                                                         // if we add more menu options to the systray icon, this will need to be revisited.
 
       mouseWnd      := WindowFromPoint(LLMouseHook.HookStruct.Pt);                                      // get the window this mouse message is for
-//      debugInteger('mouseWnd', mouseWnd);
+
       isDesktop     := (mouseWnd = hDesktop) or (mouseWnd = hDefView);                                  // is it the desktop?
       isMenuWnd     := menuWnd(MouseWnd);                                                               // is it one of our menus?
 
@@ -694,12 +695,6 @@ begin
       case isDesktop and isRButtonUp and (GetKeyState(VK_MENU)  < 0) of TRUE: GREFRESH := TRUE; end;    // ALT-rightclick on desktop refreshes all menu data when the next statement executes
       case isDesktop and isRButtonUp of TRUE: MenuTimer.Enabled := TRUE; end;                           // right-click release on desktop, show main menu
     end;
-
-//    hDefView := FindWindowEx(hProgman, 0, 'SHELLDLL_DefView', '');
-//    case hDefView = 0 of TRUE: begin hWorkerW := findWindowEx(hProgman, 0, 'WorkerW', '');
-//                                     hDefView := FindWindowEx(hWorkerW, 0, 'SHELLDLL_DefView', ''); end;end;
-
-//    debug('Mouse Test 2');
 
     hProgman := FindWindow('Progman', 'Program Manager');
     hDefView := FindWindowEx(hProgman, 0, 'SHELLDLL_DefView', '');
@@ -755,6 +750,8 @@ begin
 
   case hasParamConfig of  TRUE: showConfigForm;
                          FALSE: case hasParamShowMenu of TRUE: begin Pt := getParamXY; buildAndShowTheMenu; end;end;end;
+
+  case GFIRST of TRUE: checkHotkey(handle); end;
 end;
 
 procedure TCustomMenu.FormDestroy(Sender: TObject);
@@ -952,6 +949,11 @@ begin
   buildAndShowTheMenu;
 end;
 
+procedure TCustomMenu.WMHotKey(var Msg: TWMHotKey);
+begin
+  menuTimer.enabled := hotkeyEnabled and (msg.HotKey = hotkeyAtom);
+end;
+
 procedure TCustomMenu.WMNCPaint(var Msg: TWMNCPaint);
 // draw a subtle 1-pixel border around the window.
 var
@@ -976,6 +978,7 @@ end;
 procedure TCustomMenu.WMXYMessage(var Msg: TMessage);
 var vPt: TPoint;
 begin
+  debug('hello');
   vPt.X := msg.WParam;
   vPt.Y := msg.LParam;
   Pt := vPt;

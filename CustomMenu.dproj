@@ -132,7 +132,7 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Locale>12297</VerInfo_Locale>
         <Icon_MainIcon>res\menu.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>res\menu.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>res\menu.png</UWP_DelphiLogo150>
@@ -140,8 +140,8 @@
         <PostBuildEvent><![CDATA[copy $(OUTPUTPATH) $(PROJECTDIR)\SampleMenu\
 :: copy $(OUTPUTPATH) F:\
 $(PostBuildEvent)]]></PostBuildEvent>
-        <VerInfo_Release>5</VerInfo_Release>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.5.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.5.0;Comments=</VerInfo_Keys>
+        <VerInfo_Release>6</VerInfo_Release>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.6.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.6.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -169,6 +169,10 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="rundll32Def.pas"/>
         <DCCReference Include="msSettingsDef.pas"/>
         <DCCReference Include="shellGuidsDef.pas"/>
+        <DCCReference Include="FormHotkeys.pas">
+            <Form>HotkeyForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -202,16 +206,16 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win64\Debug\CustomMenu.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win64">
-                        <RemoteName>CustomMenu.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="menu.png" Configuration="Release" Class="UWP_DelphiLogo44">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo44x44.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win64\Debug\CustomMenu.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>CustomMenu.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
