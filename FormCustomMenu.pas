@@ -46,6 +46,7 @@ type
     bottomPanel: TPanel;
     btnDown: TSpeedButton;
     btnUp: TSpeedButton;
+    menuConfig: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure menuTimerTimer(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -63,6 +64,7 @@ type
     procedure btnUpMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure FormMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
     procedure FormMouseWheelUp(Sender: TObject; Shift: TShiftState;  MousePos: TPoint; var Handled: Boolean);
+    procedure menuConfigClick(Sender: TObject);
   private
     FHook:  THook;
     FPt:    TPoint;
@@ -673,7 +675,8 @@ begin
       LLMouseHook := TLowLevelMouseHook(Hook);
 
       case (HookMsg.msg = WM_MOUSEMOVE) or (HookMsg.Msg = WM_MOUSEWHEEL) of TRUE: EXIT; end;            // only interested in clicks
-      case LLMouseHook.HookStruct.Pt.Y > screen.WorkAreaRect.Bottom of TRUE: EXIT; end;                 // the mouse is over the taskbar/system tray
+      case LLMouseHook.HookStruct.Pt.Y > (screen.WorkAreaRect.Bottom - CM_HEIGHT_TRAY_MENU) of TRUE: EXIT; end;
+                                                                                                        // the mouse is over the taskbar/system tray
                                                                                                         // if we add more menu options to the systray icon, this will need to be revisited.
 
       mouseWnd      := WindowFromPoint(LLMouseHook.HookStruct.Pt);                                      // get the window this mouse message is for
@@ -933,6 +936,13 @@ begin
   ShowScrollBar(listBox.Handle, SB_HORZ, FALSE);
   ShowScrollBar(listBox.Handle, SB_VERT, FALSE);
   FListBoxWndProc(Msg); // process message
+end;
+
+procedure TCustomMenu.menuConfigClick(Sender: TObject);
+begin
+  mainMenu.shutMenus;
+  case configFormOpen of  TRUE: enableConfigForm;
+                         FALSE: showConfigForm; end;
 end;
 
 procedure TCustomMenu.menuTimerTimer(Sender: TObject);

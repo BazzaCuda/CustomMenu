@@ -57,6 +57,7 @@ const
   CM_NEW_ITEM_NAME    = 'New Menu Item';
   CM_REGISTRY_KEY     = 'SOFTWARE\Classes\DesktopBackground\shell';         // don't add the trailing \
   CM_CTRL_FILE_NAME   = 'ctrl-click';
+  CM_HEIGHT_TRAY_MENU = 30;
 
   IL2_CHEVRON   = 0;
   IL2_LUASHIELD = 1;
@@ -150,7 +151,6 @@ begin
   try
     ini.add('name=Right-Click me to open Config;icon=' + getExePath + 'CustomMenu.exe,0;hint=You can right-click any menu to open Config;');
     ini.saveToFile(getIniFileName);
-//    sleep(1000); // make sure it gets saved to disk before buildAndShowTheMenu tries to read it.
   finally
     ini.free;
   end;
