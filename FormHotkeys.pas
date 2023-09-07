@@ -21,8 +21,8 @@ type
 function checkHotkey(aWND: HWND): boolean;
 
 var
-  hotkeyEnabled: boolean;
-  hotkeyAtom:    integer;
+  FHotkeyEnabled: boolean;
+  FHotkeyAtom:    integer;
 
 implementation
 
@@ -33,40 +33,67 @@ const
   CM_HOTKEY_FILE_NAME = 'hotkey';
 
 var
-  hotkeyWND:  HWND;
+  FHotkeyWND:   HWND;
+  FHotKey:      integer;
+  FShift:       THKModifiers;
 
 {$R *.dfm}
 
-function readHotkey: integer;
+function SetToInt(const aSet; const Size: integer): integer;
 begin
-  result := 0;
+  Result := 0;
+  Move(aSet, Result, Size);
+end;
+
+procedure IntToSet(const Value:integer; var aSet; const Size: integer);
+begin
+  Move(Value, aSet, Size);
+end;
+
+function readHotkey: boolean;
+begin
+  result := FALSE;
+  FHotkey := 0;
+  FShift := [];
+
   var sl := TStringList.create;
   try
     sl.loadFromFile(getExePath + CM_HOTKEY_FILE_NAME);
     case sl.count = 0 of TRUE: EXIT; end;
-    result := strToIntDef(sl[0], 0);
+    FHotkey := strToIntDef(sl[0], 0);
+    case sl.count > 1 of TRUE: intToSet(strToIntDef(sl[1], 0), FShift, sizeOf(FShift)); end;
+    result := TRUE;
   finally
     sl.free;
   end;
 end;
 
-function registerHotkey(hotkey: integer): integer;
+function shortcutAsKey(aHotkey: integer): integer;
+var
+  key: WORD;
+  dummyShift: TShiftState;
+begin
+  ShortCutToKey(aHotkey, key, dummyShift);
+  result := key;
+end;
+
+function registerHotkey(aHotkey: integer; aShift: THKModifiers): boolean;
 var
   key, mods: WORD;
-  shift: TShiftState;
 begin
-  result := 0;
-  case hotkeyEnabled of TRUE: EXIT; end;
+  result := FALSE;
+  case FHotkeyEnabled of TRUE: EXIT; end;
 
-  hotkeyAtom := globalAddAtom('CustomMenuHotkey');
+  FHotkeyAtom := globalAddAtom('CustomMenuHotkey');
 
-  ShortCutToKey(hotkey, key, shift);
+  key := shortcutAsKey(aHotkey);
+
   mods := 0;
-  case ssCtrl   in shift of TRUE: mods := mods or MOD_CONTROL; end;
-  case ssShift  in shift of TRUE: mods := mods or MOD_SHIFT; end;
-  case ssAlt    in shift of TRUE: mods := mods or MOD_ALT; end;
-  hotkeyEnabled := winAPI.windows.RegisterHotKey(hotkeyWnd, hotkeyAtom, mods, key);
-  result := key;
+  case hkCtrl   in aShift of TRUE: mods := mods or MOD_CONTROL; end;
+  case hkShift  in aShift of TRUE: mods := mods or MOD_SHIFT; end;
+  case hkAlt    in aShift of TRUE: mods := mods or MOD_ALT; end;
+  FHotkeyEnabled := winAPI.windows.RegisterHotKey(FHotkeyWnd, FHotkeyAtom, mods, key);
+  result := TRUE;
 end;
 
 function checkHotkey(aWND: HWND): boolean;
@@ -74,9 +101,8 @@ var
   hotkeyForm: THotkeyForm;
 begin
   case fileExists(getExePath + CM_HOTKEY_FILE_NAME) of FALSE: EXIT; end;
-  hotkeyWnd := aWND;
-  var hotkey := readHotkey;
-  case hotkey <> 0 of  TRUE:  registerHotKey(hotkey);
+  FHotkeyWnd := aWND;
+  case readHotkey of  TRUE:  registerHotKey(FHotkey, FShift);
                       FALSE:  begin
                                 hotkeyForm := THotkeyForm.create(NIL);
                                 try
@@ -86,28 +112,32 @@ begin
                                 end;end;end;
 end;
 
-function saveHotkey(aHotkey: integer): boolean;
+function saveHotkey(aHotkey: integer; aShift: THKModifiers): boolean;
 begin
   var sl := TStringList.create;
   try
-    sl.add(intToStr(aHotkey));
+    sl.add(intToStr(shortcutAsKey(aHotkey)));
+    case aShift <> [] of TRUE: sl.add(intToStr(setToInt(aShift, sizeOf(aShift)))); end;
     sl.saveToFile(getExePath + CM_HOTKEY_FILE_NAME);
   finally
     sl.free;
   end;
 end;
 
+{ THotkeyForm }
+
 procedure THotkeyForm.pnlOKClick(Sender: TObject);
 begin
-  saveHotkey(registerHotkey(hotkey.hotkey));
+  registerHotkey(hotkey.hotkey, hotkey.Modifiers);
+  saveHotkey(hotkey.hotkey, hotkey.Modifiers);
   modalResult := mrOK;
 end;
 
 initialization
-  hotkeyEnabled := FALSE;
-  hotkeyAtom    := 0;
+  FHotkeyEnabled := FALSE;
+  FHotkeyAtom    := 0;
 
 finalization
-  case hotkeyEnabled of TRUE: winAPI.windows.UnregisterHotKey(hotKeyWnd, hotkeyAtom); end;
+  case FHotkeyEnabled of TRUE: winAPI.windows.UnregisterHotKey(FHotKeyWnd, FHotkeyAtom); end;
 
 end.

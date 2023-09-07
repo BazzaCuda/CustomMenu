@@ -963,7 +963,7 @@ procedure TCustomMenu.WMHotKey(var Msg: TWMHotKey);
 begin
   FPT.X := (getscreenWidth - (width div 2)) div 2;
   FPT.Y := 20;
-  menuTimer.enabled := hotkeyEnabled and (msg.HotKey = hotkeyAtom);
+  menuTimer.enabled := FHotkeyEnabled and (msg.HotKey = FHotkeyAtom);
 end;
 
 procedure TCustomMenu.WMNCPaint(var Msg: TWMNCPaint);
