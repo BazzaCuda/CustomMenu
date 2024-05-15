@@ -34,13 +34,13 @@ Examples:
 
 **Creating live browse menus**
 
-To create such menus, you specify "browse" in the command box.
-The folder to be browsed is specified in the Directory box.
-The Parameters box determines which files and folders will be shown from the folder.
+- To create such menus, you specify "browse" in the command box.
+- The folder to be browsed is specified in the Directory box.
+- The Parameters box determines which files and folders will be shown from the folder.
 
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/202c80ed-cbc9-46f9-b3cf-d6d9783648c1)
 
-This creates a menu item called `"Browse Downloads\"`. When hovered over with the mouse, a live submenu is displayed showing the contents of my downloads folder:
+This creates a menu item called `"Browse Downloads\"`. When hovered over with the mouse, a live submenu is displayed showing the contents of the downloads folder:
 
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/6a382453-61ad-4e39-8792-7f86bd8e6e88)
 
