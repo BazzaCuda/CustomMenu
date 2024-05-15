@@ -951,7 +951,6 @@ object CustomMenu: TCustomMenu
     00008000000080000000000000000000000000000000F8000000F8000000F80F
     0000FC7F0000}
   KeyPreview = True
-  OldCreateOrder = False
   Position = poScreenCenter
   Visible = True
   OnActivate = FormActivate
@@ -960,7 +959,6 @@ object CustomMenu: TCustomMenu
   OnKeyUp = FormKeyUp
   OnMouseWheelDown = FormMouseWheelDown
   OnMouseWheelUp = FormMouseWheelUp
-  PixelsPerInch = 96
   TextHeight = 15
   object dummyLabel: TLabel
     Left = 96

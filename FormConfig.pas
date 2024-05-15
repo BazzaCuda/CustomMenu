@@ -28,7 +28,7 @@ uses
   Vcl.Buttons, Vcl.Imaging.pngimage, Vcl.Menus, VirtualTrees, WinAPI.ActiveX,
   Vcl.Samples.Spin,
 
-  Clipbrd, WinAPI.ShlObj;
+  Clipbrd, WinAPI.ShlObj, Vcl.Mask;
 
 type
   TConfigForm = class(TForm)

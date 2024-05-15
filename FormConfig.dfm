@@ -1797,7 +1797,6 @@ object ConfigForm: TConfigForm
     0080010000000000000000000000000000000000000000000000000000000000
     00000000000000000000000000000000000001000080010000FFFF0000}
   KeyPreview = True
-  OldCreateOrder = False
   PopupMenu = popupMenu
   Position = poScreenCenter
   ShowHint = True
@@ -1807,7 +1806,6 @@ object ConfigForm: TConfigForm
   OnKeyUp = FormKeyUp
   OnResize = FormResize
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 17
   object backPanel: TPanel
     Left = 0
@@ -3990,6 +3988,7 @@ object ConfigForm: TConfigForm
         Font.Style = []
         ParentFont = False
         TabOrder = 8
+        Text = ''
         OnChange = editCommandChange
       end
       object editDirectory: TLabeledEdit
@@ -4009,6 +4008,7 @@ object ConfigForm: TConfigForm
         Font.Style = []
         ParentFont = False
         TabOrder = 12
+        Text = ''
         OnChange = editDirectoryChange
       end
       object editIconFile: TLabeledEdit
@@ -4027,6 +4027,7 @@ object ConfigForm: TConfigForm
         Font.Style = []
         ParentFont = False
         TabOrder = 6
+        Text = ''
         OnChange = editIconFileChange
       end
       object editIconIx: TSpinEdit
@@ -4064,6 +4065,7 @@ object ConfigForm: TConfigForm
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        Text = ''
         OnChange = editNameChange
       end
       object editParams: TLabeledEdit
@@ -4082,6 +4084,7 @@ object ConfigForm: TConfigForm
         Font.Style = []
         ParentFont = False
         TabOrder = 11
+        Text = ''
         OnChange = editParamsChange
       end
       object editSubMenuName: TLabeledEdit
@@ -4109,6 +4112,7 @@ object ConfigForm: TConfigForm
         ParentFont = False
         ReadOnly = True
         TabOrder = 1
+        Text = ''
       end
       object checkboxPanel: TPanel
         Left = 308
@@ -4236,6 +4240,7 @@ object ConfigForm: TConfigForm
         Font.Style = []
         ParentFont = False
         TabOrder = 20
+        Text = ''
         OnChange = editHintChange
       end
       object btnSaveRegistry: TButton

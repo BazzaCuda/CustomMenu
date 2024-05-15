@@ -693,6 +693,14 @@ begin
       FPT :=  LLMouseHook.HookStruct.Pt;                                                                // screen coords of mouse click
       isRButton   := (HookMsg.msg = WM_RBUTTONDOWN) OR (HookMsg.msg = WM_RBUTTONUP);                    // click or release of right mouse button?
       isRButtonUp := (HookMsg.msg = WM_RBUTTONUP);                                                      // release of right mouse button?
+
+//      case isDesktop and isRButtonUP of TRUE: begin
+//        var lvHitTestInfo: TLVHitTestInfo;
+//        lvHitTestInfo.pt := LLMouseHook.HookStruct.Pt;
+//        SendMessage(hDesktop, LVM_SUBITEMHITTEST, 0, LPARAM(@lvHitTestInfo));
+//        if (lvHitTestInfo.flags and LVHT_ONITEM) <> 0 then EXIT;
+//      end;end;
+
       case isDesktop and isRButton of TRUE: HookMsg.Result := 1; end;                                   // trap every click and release of the right mouse button on the desktop
       case isDesktop and isRButtonUp and (GetKeyState(VK_SHIFT) < 0) of TRUE: closeApp; end;            // SHIFT-rightclick on desktop closes this app
       case isDesktop and isRButtonUp and (GetKeyState(VK_MENU)  < 0) of TRUE: GREFRESH := TRUE; end;    // ALT-rightclick on desktop refreshes all menu data when the next statement executes
