@@ -17,6 +17,10 @@ Great for PC Support technicians! Configure and run from a USB stick containing 
 Many, many exciting features. And it's all free. (see the Wiki for a quick preview).
 
 See the Wiki overview (and screenshots) at https://github.com/BazzaCuda/CustomMenu/wiki/Overview
+- CustomMenu Wiki Home [Wiki Home](https://github.com/BazzaCuda/CustomMenu/wiki)
+- Overview (screenshots) [Overview](https://github.com/BazzaCuda/CustomMenu/wiki/Overview)
+- Getting Started [Getting Started](https://github.com/BazzaCuda/CustomMenu/wiki/Getting-Started)
+- Live submenus for files and folders (also see below) [Browsing files and folders](https://github.com/BazzaCuda/CustomMenu/wiki/Browsing-files-and-folders)
 
 Follow and stay tuned for updates.
 
