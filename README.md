@@ -74,6 +74,7 @@ When a USB stick is inserted, a quick hover over the USB drive menu items shows 
 Note that if you save your Custom Menu to the Windows Desktop Menu with "Write to Desktop Menu" (which I always do), the "browse" menu items will only work when accessed from Custom Menu, not from the Windows menu as Windows doesn't understand what to do with the "browse" command.
 
 Also, if a submenu (especially a browsed folder) has so many items that it requires the scroll buttons to be displayed, you only need to hover your mouse over a scroll button for it to automatically scroll the menu items. Alternatively, you can scroll using the mouse wheel.
+
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/266a506b-766f-4e4a-9340-658e0df88ac7)
 
 
