@@ -30,6 +30,8 @@ Examples:
 ![example](https://user-images.githubusercontent.com/22550919/209433120-93bdfd3c-6990-4958-8581-75fc001b423a.jpg)
 
 
+
+
 **Creating live browse menus**
 
 To create such menus, you specify "browse" in the command box.
@@ -38,17 +40,19 @@ The Parameters box determines which files and folders will be shown from the fol
 
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/202c80ed-cbc9-46f9-b3cf-d6d9783648c1)
 
-This creates a menu item called "Browse Downloads\". When hovered over with the mouse, a live submenu is displayed showing the contents of my downloads folder:
+This creates a menu item called `"Browse Downloads\"`. When hovered over with the mouse, a live submenu is displayed showing the contents of my downloads folder:
+
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/6a382453-61ad-4e39-8792-7f86bd8e6e88)
 
-Because I have specified "+folders", all folders will be displayed and each folder becomes another submenu which can be hovered over:
+Because "+folders" has been specified, all folders will be displayed and each folder becomes another submenu which can be hovered over:
+
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/92477c7a-5669-471a-8200-8d3805a349c3)
 
-In this case, I have limited the files to be shown as just *.pdf and *.epub. You can also specify `*.*` to show all files (this is the default).
+In this example, Custom Menu has been limited to only showing *.pdf and *.epub files. You can also specify `*.*` to show all files (this is the default).
 
 
 
-As you move the mouse over the folders, it will helpfully distinguish between those that have contents [which match your criteria] and those that don't:
+As you move the mouse over the folders, it will very helpfully distinguish between those that have contents [which match your criteria] and those that don't:
 
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/217e3d05-75de-4fa9-98de-d0e635ec6f2a)
 
