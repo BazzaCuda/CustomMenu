@@ -1,5 +1,13 @@
 # CustomMenu
 
+**Quick Tip**: you can delete the default menu item that ''CustomMenu'' creates for you:
+
+![custommenurightclickme](https://github.com/BazzaCuda/CustomMenu/assets/22550919/218b82cd-e348-4fe7-937f-796d4c2a2c05)
+
+A right-click on your menu or any submenu will open the Config window.
+Also, if you right-click your desktop with no menu items defined, the Config window will open.
+
+-----------
 _NOW with system-wide [customizable] hotkey activation to allow you to display your custom menu without accessing your desktop! For information on how to activate the hotkey functionality, see the release notes for version 1.0.6 here: https://github.com/BazzaCuda/CustomMenu/releases/tag/v1.0.6_
 
 **Tip of the Day**: the easiest way to get started with CustomMenu is to select all the shortcuts on your desktop and simply drag and drop them onto your empty menu tree (left panel) in the config window. CustomMenu will create a menu item for each shortcut complete with the correct icon, starting directory and any parameters. That gets your custom menu up and running instantly with minimal effort. At a later date, if you wish, you can take your time re-arranging them and putting them into suitable submenus.
