@@ -49,7 +49,7 @@ Examples:
 
 - To create such menus, you specify "browse" in the command box.
 - The folder to be browsed is specified in the Directory box.
-- The Parameters box determines which files and folders will be shown from the folder.
+- The Parameters box determines which files and folders will be shown from the folder (default is \*.\*).
 
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/202c80ed-cbc9-46f9-b3cf-d6d9783648c1)
 
