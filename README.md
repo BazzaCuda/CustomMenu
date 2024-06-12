@@ -5,7 +5,8 @@
 ![custommenurightclickme](https://github.com/BazzaCuda/CustomMenu/assets/22550919/218b82cd-e348-4fe7-937f-796d4c2a2c05)
 
 A right-click on your menu or any submenu will open the Config window.
-Also, if you right-click your desktop with no menu items defined, the Config window will open.
+
+Also, if you right-click your desktop with no menu items defined/saved, the Config window will open.
 
 -----------
 _NOW with system-wide [customizable] hotkey activation to allow you to display your custom menu without accessing your desktop! For information on how to activate the hotkey functionality, see the release notes for version 1.0.6 here: https://github.com/BazzaCuda/CustomMenu/releases/tag/v1.0.6_
