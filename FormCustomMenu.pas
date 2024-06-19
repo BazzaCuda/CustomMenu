@@ -445,7 +445,7 @@ begin
 
 
   { The width of the menu is based on the longest textWidth of the first 40 to be displayed, up to a maximum of 420 pixels }
-  var vLongest: integer;
+  var vLongest: integer := 0;
   var vTextWidth: integer;
   for i := 0 to 40 do begin     // base the subMenu listBox width only on the first 40 items that will be displayed
     vTextWidth := listBox.canvas.textWidth(listBox.items[i]);
