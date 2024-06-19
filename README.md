@@ -1,8 +1,17 @@
 # CustomMenu
 
+**Quick Tip**: you can delete the default menu item that `CustomMenu` creates for you:
+
+![custommenurightclickme](https://github.com/BazzaCuda/CustomMenu/assets/22550919/218b82cd-e348-4fe7-937f-796d4c2a2c05)
+
+A right-click on your menu or any submenu will open the Config window.
+
+Also, if you right-click your desktop with no menu items defined/saved, the Config window will open.
+
+-----------
 _NOW with system-wide [customizable] hotkey activation to allow you to display your custom menu without accessing your desktop! For information on how to activate the hotkey functionality, see the release notes for version 1.0.6 here: https://github.com/BazzaCuda/CustomMenu/releases/tag/v1.0.6_
 
-**Tip of the Day**: the easiest way to get started with CustomMenu is to select all the shortcuts on your desktop and simply drag and drop them onto your empty menu tree (left panel) in the config window. CustomMenu will create a menu item for each shortcut complete with the correct icon, starting directory and any parameters. That gets your custom menu up and running instantly with minimal effort. At a later date, if you wish, you can take your time re-arranging them and putting them into suitable submenus.
+**Tip of the Day**: the easiest way to get started with `CustomMenu` is to select all the shortcuts on your desktop and simply drag and drop them onto your empty menu tree (left panel) in the config window. `CustomMenu` will create a menu item for each shortcut complete with the correct icon, starting directory and any parameters. That gets your custom menu up and running instantly with minimal effort. At a later date, if you wish, you can take your time re-arranging them and putting them into suitable submenus.
 
 NOW AVAILABLE FOR DOWNLOAD! (see https://github.com/BazzaCuda/CustomMenu/releases)
 
@@ -40,7 +49,7 @@ Examples:
 
 - To create such menus, you specify "browse" in the command box.
 - The folder to be browsed is specified in the Directory box.
-- The Parameters box determines which files and folders will be shown from the folder.
+- The Parameters box determines which files and folders will be shown from the folder (default is \*.\*).
 
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/202c80ed-cbc9-46f9-b3cf-d6d9783648c1)
 
@@ -71,7 +80,7 @@ Then have individual "browse" commands for each drive:
 When a USB stick is inserted, a quick hover over the USB drive menu items shows which drives are mounted and which aren't:
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/814078df-b058-44df-939f-1b95fee88e2e)
 
-Note that if you save your Custom Menu to the Windows Desktop Menu with "Write to Desktop Menu" (which I always do), the "browse" menu items will only work when accessed from Custom Menu, not from the Windows menu as Windows doesn't understand what to do with the "browse" command.
+Note that if you save your `Custom Menu` to the Windows Desktop Menu with "Write to Desktop Menu" (which I always do), the "browse" menu items will only work when accessed from `CustomMenu`, not from the Windows menu as Windows doesn't understand what to do with the "browse" command.
 
 Also, if a submenu (especially a browsed folder) has so many items that it requires the scroll buttons to be displayed, you only need to hover your mouse over a scroll button for it to automatically scroll the menu items. Alternatively, you can scroll using the mouse wheel.
 
