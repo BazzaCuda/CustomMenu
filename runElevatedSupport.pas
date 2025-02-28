@@ -1,5 +1,5 @@
 ﻿{   CustomMenu
-    Copyright (C) 2022 Baz Cuda
+    Copyright (C) 2022-2099 Baz Cuda
     https://github.com/BazzaCuda/CustomMenu
 
     This program is free software; you can redistribute it and/or modify
