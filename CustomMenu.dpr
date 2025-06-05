@@ -52,7 +52,7 @@ begin
   createMiniIni;
 
 //  debugPause;
-  debugClear;
+  {$if BazDebugWindow} debugClear; {$endif}
 
   Application.Initialize;
   Application.MainFormOnTaskbar := TRUE;

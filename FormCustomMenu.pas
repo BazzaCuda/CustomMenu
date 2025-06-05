@@ -526,7 +526,7 @@ function TCustomMenu.hookOff: boolean;
 begin try
   case FHook = NIL of TRUE: EXIT; end;                 // This can't be the main menu/window/form
   case menuID = 0 of TRUE: FHook.Active := FALSE; end; // only unhook when closing the main form/app, not a submenu
-  except debug('exception in hookOff'); end;
+  except {$if BazDebugWindow} debug('exception in hookOff'); {$endif} end;
 end;
 
 function TCustomMenu.closeApp: boolean;
@@ -540,11 +540,11 @@ function TCustomMenu.shutForm: boolean;
 begin try
   hookOff;               // only if this is the mainMenu.
   shutSubMenu;           // and all subordinate submenus
-  case listBox = NIL of TRUE: debug('lisbox = NIL'); end;
+  case listBox = NIL of TRUE: {$if BazDebugWindow} debug('lisbox = NIL'); {$endif} end;
   deleteHWND(listBox.handle);
   case parentForm <> NIL of TRUE: enableWindow(parentForm.handle, TRUE); end;
   case itemData <> NIL of TRUE: begin itemDataClear(itemData); itemData.clear; itemData.free; itemData := NIL; end;end;
-  except debug('exception in shutForm'); end;
+  except {$if BazDebugWindow} debug('exception in shutForm'); {$endif} end;
 end;
 
 function TCustomMenu.shutSubMenu(ownerItemID: integer = -1): boolean;
@@ -553,7 +553,7 @@ begin try
   case subMenu = NIL of TRUE: EXIT; end;
   case (ownerItemID <> -1) and (ownerItemID = subMenuItemID) of TRUE: EXIT; end;      // only close the current submenu if the mouse moves over a different menu item to the current submenu's owner item
   submenu.shutForm; subMenu.close; subMenu.free; subMenu := NIL; subMenuItemID := -1; // close this menu's/window's/form's current submenu
-  except debug('exception in shutSubMenu'); end;
+  except {$if BazDebugWindow} debug('exception in shutSubMenu'); {$endif} end;
 end;
 
 procedure TCustomMenu.btnDownClick(Sender: TObject);
@@ -590,7 +590,7 @@ begin try
   shutSubMenu;            // cascades down into all subMenus of subMenus via shutForm
   SetWindowPos(Handle, HWND_BOTTOM, 0, 0, 0, 0, SWP_HIDEWINDOW OR SWP_NOMOVE OR SWP_NOSIZE);
   enableConfigForm; // for when the user has used the "Show Menu" button on the config form and then closed the menus
-  except debug('exception in shutMenus'); end;
+  except {$if BazDebugWindow} debug('exception in shutMenus'); {$endif} end;
 end;
 //\\========== CLOSING MENUS AND SUBMENUS ==========\\
 
@@ -654,8 +654,8 @@ end;
 
 function TCustomMenu.setMouseTrap: boolean;
 begin
-  case menuID <> 0 of TRUE: begin debug('Tried to create a mouse trap in a submenu'); EXIT; end;end;
-  case FHook <> NIL of TRUE: begin debug('Tried to create a second mouse trap in the main menu'); EXIT; end;end;
+  case menuID <> 0  of TRUE: begin {$if BazDebugWindow} debug('Tried to create a mouse trap in a submenu'); {$endif} EXIT; end;end;
+  case FHook <> NIL of TRUE: begin {$if BazDebugWindow} debug('Tried to create a second mouse trap in the main menu'); {$endif} EXIT; end;end;
 
   FHook := THookInstance<TLowLevelMouseHook>.CreateHook(self);
   FHook.OnPreExecute := procedure(Hook: THook; var HookMsg: THookMessage)
@@ -807,8 +807,8 @@ begin
   case listBox.Count  = -1 of TRUE: EXIT; end; // is this even possible?
   case index          = -1 of TRUE: EXIT; end; // is this even possible?
   case itemData.count =  0 of TRUE: EXIT; end;
-  case index > imageList1.count - 1 of TRUE: begin debugFormat('index: %d, imageList1.count: %d', [index, imageList1.count]); debug('not enough icons in imageList'); EXIT; end;end;
-  case index > itemData.count   - 1 of TRUE: begin debugFormat('index: %d, itemData.count: %d',   [index, itemData.count]);   debug('not enough items in itemData'); EXIT; end;end;
+  case index > imageList1.count - 1 of TRUE: begin {$if BazDebugWindow} debugFormat('index: %d, imageList1.count: %d', [index, imageList1.count]); debug('not enough icons in imageList'); {$endif} EXIT; end;end;
+  case index > itemData.count   - 1 of TRUE: begin {$if BazDebugWindow} debugFormat('index: %d, itemData.count: %d',   [index, itemData.count]);   debug('not enough items in itemData');  {$endif} EXIT; end;end;
 
   var id: TItemData  := itemData[index];
   var vText: string := itemData[index].idName; // don't use listBox.items[index] as the text will have nobbled any unicode characters
