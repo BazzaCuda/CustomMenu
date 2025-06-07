@@ -80,6 +80,8 @@ type
     FListBoxWndProc: TWndMethod;
 
     FCtrlClickActivate: boolean;
+    FBackgroundColor: integer;
+    FHighlightColor: integer;
 
     var FOldHintIx: integer;
     procedure listBoxWndProc(var Msg: TMessage);
@@ -621,7 +623,7 @@ end;
 
 function TCustomMenu.configListBox: boolean;
 begin
-  listBox.Color       := CM_BACKGROUND_COLOR;
+  listBox.Color       := FBackgroundColor;
   listBox.Align       := alTop;
   listBox.BorderStyle := bsNone; // We draw a subtle border in WMNCPaint
   listBox.BevelInner  := bvNone;
@@ -755,6 +757,9 @@ begin
   case GFIRST of TRUE: ShowTrayIcon(trayIcon); end;
   FOldHintIx := -1;
 
+  FBackgroundColor  := getBackgroundColor;
+  FHighlightColor   := getHighlightColor;
+
   configListBox;
 
   hWNDs.add(bottomPanel.handle); // so the mouse hook can identify it as ours.
@@ -825,7 +830,7 @@ begin
                                             vText[length(vText)] := '.'; vText[length(vText) - 1] := '.'; vText[length(vText) - 2] := '.'; end;end;
 
   case odSelected in State of TRUE: begin
-                                      listBox.Canvas.Brush.Color := CM_HIGHLIGHT_COLOR;
+                                      listBox.Canvas.Brush.Color := FHighlightColor;
                                       listBox.Canvas.Font.Color  := clWhite; end;end;
 
   listbox.Canvas.FillRect(Rect);

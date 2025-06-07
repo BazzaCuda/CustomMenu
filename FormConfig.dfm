@@ -1814,7 +1814,9 @@ object ConfigForm: TConfigForm
     Height = 582
     Align = alClient
     BevelOuter = bvNone
+    Color = 2829099
     Ctl3D = False
+    ParentBackground = False
     ParentCtl3D = False
     TabOrder = 0
     DesignSize = (
@@ -1848,11 +1850,13 @@ object ConfigForm: TConfigForm
       Align = alLeft
       BevelOuter = bvNone
       Caption = 'treePanel'
+      Color = 2829099
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -11
       Font.Name = 'Segoe UI'
       Font.Style = []
+      ParentBackground = False
       ParentFont = False
       TabOrder = 0
       object buttonPanel: TPanel
@@ -2146,6 +2150,23 @@ object ConfigForm: TConfigForm
         BevelInner = bvNone
         BevelOuter = bvNone
         Color = 2829099
+        Colors.BorderColor = 15987699
+        Colors.DisabledColor = clGray
+        Colors.DropMarkColor = 15385233
+        Colors.DropTargetColor = 15385233
+        Colors.DropTargetBorderColor = 15385233
+        Colors.FocusedSelectionColor = 15385233
+        Colors.FocusedSelectionBorderColor = 15385233
+        Colors.GridLineColor = 15987699
+        Colors.HeaderHotColor = clBlack
+        Colors.HotColor = clBlack
+        Colors.SelectionRectangleBlendColor = 15385233
+        Colors.SelectionRectangleBorderColor = 15385233
+        Colors.SelectionTextColor = clBlack
+        Colors.TreeLineColor = 9471874
+        Colors.UnfocusedColor = clGray
+        Colors.UnfocusedSelectionColor = clWhite
+        Colors.UnfocusedSelectionBorderColor = clWhite
         DragMode = dmAutomatic
         DragOperations = [doMove]
         DragType = dtVCL
@@ -2175,7 +2196,9 @@ object ConfigForm: TConfigForm
       Height = 561
       Anchors = []
       BevelOuter = bvNone
+      Color = 2829099
       DragMode = dmAutomatic
+      ParentBackground = False
       TabOrder = 1
       object iconBevel: TBevel
         Left = 24
@@ -3630,7 +3653,7 @@ object ConfigForm: TConfigForm
       object lblBrowseCommand: TLabel
         Left = 361
         Top = 302
-        Width = 37
+        Width = 38
         Height = 13
         Caption = 'Browse'
         Font.Charset = DEFAULT_CHARSET
@@ -3643,7 +3666,7 @@ object ConfigForm: TConfigForm
       object lblBrowseDirectory: TLabel
         Left = 459
         Top = 396
-        Width = 37
+        Width = 38
         Height = 13
         Caption = 'Browse'
         Font.Charset = DEFAULT_CHARSET
@@ -4121,7 +4144,9 @@ object ConfigForm: TConfigForm
         Height = 32
         BevelOuter = bvNone
         Caption = 'checkboxPanel'
+        Color = 2829099
         Enabled = False
+        ParentBackground = False
         ShowCaption = False
         TabOrder = 2
         object lblisSubMenu: TLabel

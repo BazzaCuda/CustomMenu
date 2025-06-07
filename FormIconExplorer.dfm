@@ -1803,13 +1803,13 @@ object IconExplorerForm: TIconExplorerForm
     0000000000000000000000000000000000000000000000000000000000800300
     0080010000000000000000000000000000000000000000000000000000000000
     00000000000000000000000000000000000001000080010000FFFF0000}
-  OldCreateOrder = False
+  KeyPreview = True
   Position = poScreenCenter
   StyleElements = []
   OnClose = FormClose
   OnCreate = FormCreate
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 17
   object backPanel: TPanel
     Left = 0
@@ -1893,6 +1893,23 @@ object IconExplorerForm: TIconExplorerForm
         BorderStyle = bsNone
         ButtonStyle = bsTriangle
         Color = 2829099
+        Colors.BorderColor = 15987699
+        Colors.DisabledColor = clGray
+        Colors.DropMarkColor = 15385233
+        Colors.DropTargetColor = 15385233
+        Colors.DropTargetBorderColor = 15385233
+        Colors.FocusedSelectionColor = 15385233
+        Colors.FocusedSelectionBorderColor = 15385233
+        Colors.GridLineColor = 15987699
+        Colors.HeaderHotColor = clBlack
+        Colors.HotColor = clBlack
+        Colors.SelectionRectangleBlendColor = 15385233
+        Colors.SelectionRectangleBorderColor = 15385233
+        Colors.SelectionTextColor = clBlack
+        Colors.TreeLineColor = 9471874
+        Colors.UnfocusedColor = clGray
+        Colors.UnfocusedSelectionColor = clWhite
+        Colors.UnfocusedSelectionBorderColor = clWhite
         ColumnDetails = cdUser
         ColumnMenuItemCount = 8
         DefaultNodeHeight = 22

@@ -1137,6 +1137,7 @@ var
   vIconIx:   integer;
 begin
   FormIconExplorer.GFilePath := extractFilePath(expandEnvs(editIconFile.text));
+  FormIconExplorer.GFilePath := 'C:\windows\system32\';
   enableWindow(handle, FALSE);
   try
     case showIconExplorer(vIconFile, vIconIx) of TRUE: actionThisIcon(vIconFile, vIconIx); end;
@@ -1450,42 +1451,64 @@ begin
 
   caption := getCleanCaption;
 
-  constraints.minWidth    := width; // the height [only] can be extended at runtime. Everything else is as designed.
-  constraints.maxWidth    := width;
-  constraints.minHeight   := height;
-  color                   := CM_BACKGROUND_COLOR;
-  backPanel.borderStyle   := bsNone;
-  backPanel.bevelInner    := bvNone;
-  backPanel.bevelOuter    := bvNone;
-  backPanel.bevelKind     := bkNone;
-  vst.color               := CM_BACKGROUND_COLOR;
-  vst.align               := alLeft;
-  vst.width               := 320;
-  vst.dragMode            := TDragMode.dmAutomatic;
-  vst.images              := imageList1;
-  vst.borderStyle         := bsNone;
-  vst.bevelInner          := bvNone;
-  vst.bevelOuter          := bvNone;
-  vst.bevelKind           := bkNone;
-  treePanel.borderStyle   := bsNone;
-  treePanel.bevelInner    := bvNone;
-  treePanel.bevelOuter    := bvNone;
-  treePanel.bevelKind     := bkNone;
-  buttonPanel.borderStyle := bsNone;
-  buttonPanel.bevelInner  := bvNone;
-  buttonPanel.bevelOuter  := bvNone;
-  buttonPanel.bevelKind   := bkNone;
-  editPanel.borderStyle   := bsNone;
-  editPanel.bevelInner    := bvNone;
-  editPanel.bevelOuter    := bvNone;
-  editPanel.bevelKind     := bkNone;
-  editPanel.align         := alNone;
-  font.name               := 'Segoe UI';
-  font.size               := 10;
-  backPanel.caption       := '';
-  FInitialHeight          := height;
-  FImageIx                := -1;
-  lblResizeTheWindow.caption := lblResizeTheWindow.caption;
+  color                       := getBackgroundColor;
+
+  constraints.minWidth        := width; // the height [only] can be extended at runtime. Everything else is as designed.
+  constraints.maxWidth        := width;
+  constraints.minHeight       := height;
+  backPanel.borderStyle       := bsNone;
+  backPanel.bevelInner        := bvNone;
+  backPanel.bevelOuter        := bvNone;
+  backPanel.bevelKind         := bkNone;
+  backPanel.color             := color;
+  vst.color                   := color;
+  vst.align                   := alLeft;
+  vst.width                   := 320;
+  vst.dragMode                := TDragMode.dmAutomatic;
+  vst.images                  := imageList1;
+  vst.borderStyle             := bsNone;
+  vst.bevelInner              := bvNone;
+  vst.bevelOuter              := bvNone;
+  vst.bevelKind               := bkNone;
+  treePanel.borderStyle       := bsNone;
+  treePanel.bevelInner        := bvNone;
+  treePanel.bevelOuter        := bvNone;
+  treePanel.bevelKind         := bkNone;
+  treePanel.color             := color;
+  buttonPanel.borderStyle     := bsNone;
+  buttonPanel.bevelInner      := bvNone;
+  buttonPanel.bevelOuter      := bvNone;
+  buttonPanel.bevelKind       := bkNone;
+  buttonPanel.color           := color;
+  editPanel.borderStyle       := bsNone;
+  editPanel.bevelInner        := bvNone;
+  editPanel.bevelOuter        := bvNone;
+  editPanel.bevelKind         := bkNone;
+  editPanel.align             := alNone;
+  editPanel.color             := color;
+  font.name                   := 'Segoe UI';
+  font.size                   := 10;
+  backPanel.caption           := '';
+  FInitialHeight              := height;
+  FImageIx                    := -1;
+  lblResizeTheWindow.caption  := lblResizeTheWindow.caption;
+  checkboxPanel.color         := color;
+
+  lblDragAndDrop.font.color             := getInfoColor;
+  lblDragDropIconFile.font.color        := lblDragAndDrop.font.color;
+  lblDragAndDropCommandFile.font.color  := lblDragAndDrop.font.color;
+  lblDragDropFolder.font.color          := lblDragAndDrop.font.color;
+  lblBrowseCommand.font.color           := lblDragAndDrop.font.color;
+  lblBrowseDirectory.font.color         := lblDragAndDrop.font.color;
+  lblCommandCategories.font.color       := lblDragAndDrop.font.color;
+  editSubMenuName.EditLabel.font.color  := lblDragAndDrop.font.color;
+  lblisSubMenu.font.color               := lblDragAndDrop.font.color;
+  lblHelp.font.color                    := lblDragAndDrop.font.color;
+  lblIconGroup.font.color               := lblDragAndDrop.font.color;
+  lblFeedback.font.color                := lblDragAndDrop.font.color;
+  lblAutoFill.font.color                := lblDragAndDrop.font.color;
+  lblWriteRegistry.font.color           := lblDragAndDrop.font.color;
+  lblResizeTheWindow.font.color         := lblDragAndDrop.font.color;
 
   vst.TreeOptions.selectionOptions  := vst.TreeOptions.selectionOptions + [toAlwaysSelectNode] - [toFullRowSelect];
   vst.treeOptions.PaintOptions      := vst.treeOptions.paintOptions - [toUseBlendedImages]; // fuzzy [selected] images fixed!
@@ -1508,6 +1531,7 @@ end;
 procedure TConfigForm.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   case key = VK_F1 of TRUE: shellExecute(0, 'open', 'https://github.com/BazzaCuda/CustomMenu/wiki', '', '', 0); end;
+  case key = VK_ESCAPE of TRUE: CloseBtnClick(NIL); end;
 end;
 
 procedure TConfigForm.CreateParams(var Params: TCreateParams);

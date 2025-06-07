@@ -49,11 +49,13 @@ type
 
 const
   CM_APP_NAME         = 'Custom Menu';
-  CM_APP_VERSION      = 'v1.0.1';
+  CM_APP_VERSION      = 'v1.1.0';
   CM_BACKGROUND_COLOR = $2B2B2B;
   CM_HIGHLIGHT_COLOR  = $484848;
-  CM_ITEM_HEIGHT      = 22;
+  CM_INFO_COLOR       = $808080; // = clGray;
+  CM_INI_COLORS       = 'colors.ini';
   CM_INI_FILE_NAME    = 'CustomMenu.ini';
+  CM_ITEM_HEIGHT      = 22;
   CM_NEW_ITEM_NAME    = 'New Menu Item';
   CM_REGISTRY_KEY     = 'SOFTWARE\Classes\DesktopBackground\shell';         // don't add the trailing \
   CM_CTRL_FILE_NAME   = 'ctrl-click';
@@ -78,9 +80,12 @@ function enableTrayExit(enable: boolean = TRUE): boolean;
 function expandEnvs(const str: string): string;
 function expandPathRelToBaseDir(const filePath: string; baseDir: string): string;
 function findCustomMenu: boolean;
+function getBackgroundColor: integer;
 function getExePath: string;
 function getFileNameWithoutExt(filename: string): string;
 function getFileVersion(const aFilePath: string = ''; const fmt: string = '%d.%d.%d.%d'): string;
+function getHighlightColor: integer;
+function getInfoColor: integer;
 function getINIFileName: string;
 function getParamXY: TPoint;
 function getScreenHeight: integer;
@@ -267,6 +272,50 @@ begin
                                                   showWindow(WND, SW_SHOW);
                                                   bringWindowToTop(WND);
                                                   setForegroundWindow(WND); end;end;
+end;
+
+function BGRtoRGB(const aBGRValue: Integer): Integer;
+var
+  vRed:   byte;
+  vGreen: byte;
+  vBlue:  byte;
+begin
+  vRed    := aBGRValue AND $FF;
+  vGreen  := (aBGRValue SHR 8) AND $FF;
+  vBlue   := (aBGRValue SHR 16) AND $FF;
+  result  := (vRed SHL 16) OR (vGreen SHL 8) OR vBlue;
+end;
+
+function getColorValue(const aKeyName: string; const aDefault: integer): integer;
+begin
+  result := aDefault;
+  case fileExists(getExePath + CM_INI_COLORS) of FALSE: EXIT; end;
+  var vSL := TStringlist.create;
+  try
+    vSL.caseSensitive := FALSE;
+    vSL.loadFromFile(getExePath + CM_INI_COLORS);
+    var vRGB: integer;
+    try vRGB := strToIntDef(vSL.values[aKeyName], aDefault); except result := 0; end;
+//    case vRGB > 0 of FALSE: EXIT; end;
+    result := BGRtoRGB(vRGB);
+  finally
+    vSL.free;
+  end;
+end;
+
+function getBackgroundColor: integer;
+begin
+  result := getColorValue('backgroundColor', CM_BACKGROUND_COLOR);
+end;
+
+function getHighlightColor: integer;
+begin
+  result := getColorValue('highlightColor', CM_HIGHLIGHT_COLOR);
+end;
+
+function getInfoColor: integer;
+begin
+  result := getColorValue('infoColor', CM_INFO_COLOR);
 end;
 
 function getExePath: string;

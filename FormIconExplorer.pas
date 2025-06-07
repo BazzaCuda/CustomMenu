@@ -75,6 +75,7 @@ type
     procedure IconViewDblClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     NumberOfIcons: LongInt;
     procedure IconViewLoadIcons(IFName: string);
@@ -92,7 +93,8 @@ function showIconExplorer(var filePath: string; var iconIx: integer): boolean;
 implementation
 
 uses
-  WinAPI.ShellAPI, _debugWindow, WinAPI.CommCtrl;
+  WinAPI.ShellAPI, _debugWindow, WinAPI.CommCtrl,
+  customMenuCommon;
 
 var
   iconExplorerForm: TiconExplorerForm;
@@ -227,10 +229,34 @@ begin
   addressLabel.caption := GFilePath;
 end;
 
+procedure TIconExplorerForm.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  case key = VK_ESCAPE of TRUE: modalResult := mrCancel; end;
+end;
+
 procedure TIconExplorerForm.FormShow(Sender: TObject);
 begin
 //  CheckBoxQueryInfo.Checked :=  eloQueryInfoHints in LV.Options;
 //  CheckBoxNotifierThread.Checked :=  eloChangeNotifierThread in LV.Options;
+  color                           := getBackgroundColor;
+  tree.color                      := color;
+  color                           := color;
+  LV.color                        := color;
+  LV.Header.color                 := color;
+  LV.PaintInfoColumn.color        := color;
+  LV.PaintInfoColumn.borderColor  := color;
+  iconView.color                  := color;
+  addressPanel.color              := color;
+  addressLabel.font.color         := getInfoColor;
+  iconLabel.font.color            := addressLabel.font.color;
+  iconControlsPanel.color         := color;
+  bottomBorderPanel.color         := color;
+  iconPanel.color                 := color;
+  panel1.color                    := color;
+  listPanel.color                 := color;
+  filterPanel.color               := color;
+  filterCombo.color               := color;
+  treePanel.color                 := color;
 end;
 
 procedure TIconExplorerForm.FormClose(Sender: TObject; var Action: TCloseAction);
