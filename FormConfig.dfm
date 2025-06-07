@@ -2,7 +2,7 @@ object ConfigForm: TConfigForm
   Left = 0
   Top = 0
   Caption = 'Custom Menu'
-  ClientHeight = 661
+  ClientHeight = 658
   ClientWidth = 828
   Color = 2829099
   Font.Charset = DEFAULT_CHARSET
@@ -1811,7 +1811,7 @@ object ConfigForm: TConfigForm
     Left = 0
     Top = 0
     Width = 828
-    Height = 661
+    Height = 658
     Align = alClient
     BevelOuter = bvNone
     Color = 2829099
@@ -1822,10 +1822,10 @@ object ConfigForm: TConfigForm
     ExplicitHeight = 637
     DesignSize = (
       828
-      661)
+      658)
     object lblResizeTheWindow: TLabel
       Left = 412
-      Top = 649
+      Top = 644
       Width = 336
       Height = 13
       Margins.Left = 0
@@ -1844,13 +1844,13 @@ object ConfigForm: TConfigForm
       Font.Style = []
       ParentFont = False
       Layout = tlBottom
-      ExplicitTop = 645
+      ExplicitTop = 642
     end
     object treePanel: TPanel
       Left = 0
       Top = 0
       Width = 320
-      Height = 661
+      Height = 658
       Align = alLeft
       BevelOuter = bvNone
       Caption = 'treePanel'
@@ -1866,7 +1866,7 @@ object ConfigForm: TConfigForm
       ExplicitHeight = 637
       object buttonPanel: TPanel
         Left = 0
-        Top = 635
+        Top = 632
         Width = 320
         Height = 26
         Align = alBottom
@@ -2197,7 +2197,7 @@ object ConfigForm: TConfigForm
     end
     object editPanel: TPanel
       Left = 326
-      Top = 10
+      Top = 0
       Width = 505
       Height = 637
       Anchors = []
@@ -2206,7 +2206,6 @@ object ConfigForm: TConfigForm
       DragMode = dmAutomatic
       ParentBackground = False
       TabOrder = 1
-      ExplicitTop = 29
       object iconBevel: TBevel
         Left = 24
         Top = 172
