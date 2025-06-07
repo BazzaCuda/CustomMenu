@@ -25,7 +25,6 @@ uses
   FormCustomMenu in 'FormCustomMenu.pas' {CustomMenu},
   Winapi.Hooks in 'Winapi.Hooks.pas',
   CustomMenuCommon in 'CustomMenuCommon.pas',
-  FormConfig in 'FormConfig.pas' {ConfigForm},
   _debugWindow in '..\DebugWindow\_debugWindow.pas',
   FormIconExplorer in 'FormIconExplorer.pas' {IconExplorerForm},
   winShell in 'winShell.pas',
@@ -38,7 +37,8 @@ uses
   rundll32Def in 'rundll32Def.pas',
   msSettingsDef in 'msSettingsDef.pas',
   shellGuidsDef in 'shellGuidsDef.pas',
-  FormHotkeys in 'FormHotkeys.pas' {HotkeyForm};
+  FormHotkeys in 'FormHotkeys.pas' {HotkeyForm},
+  FormConfig in 'FormConfig.pas';
 
 {$R *.res}
 
@@ -49,7 +49,7 @@ begin
                                                     case hasParamShowMenu of TRUE: findCustomMenu; end;
                                                     EXIT; end;end;
 
-  createMiniIni;
+//  createMiniIni;
 
 //  debugPause;
   {$if BazDebugWindow} debugClear; {$endif}

@@ -50,9 +50,9 @@ type
 const
   CM_APP_NAME         = 'Custom Menu';
   CM_APP_VERSION      = 'v1.1.0';
-  CM_BACKGROUND_COLOR = $2B2B2B;
+  CM_BACKGROUND_COLOR = $1B1B1B; // $2B2B2B;
   CM_HIGHLIGHT_COLOR  = $484848;
-  CM_INFO_COLOR       = $808080; // = clGray;
+  CM_INFO_COLOR       = $A0A0FF; // this is $BGR - colors.ini records $RGB
   CM_INI_COLORS       = 'colors.ini';
   CM_INI_FILE_NAME    = 'CustomMenu.ini';
   CM_ITEM_HEIGHT      = 22;
@@ -275,20 +275,24 @@ begin
 end;
 
 function BGRtoRGB(const aBGRValue: Integer): Integer;
-var
-  vRed:   byte;
-  vGreen: byte;
-  vBlue:  byte;
 begin
-  vRed    := aBGRValue AND $FF;
-  vGreen  := (aBGRValue SHR 8) AND $FF;
-  vBlue   := (aBGRValue SHR 16) AND $FF;
+  var vRed:   byte  := aBGRValue AND $FF;
+  var vGreen: byte  := (aBGRValue SHR 8) AND $FF;
+  var vBlue:  byte  := (aBGRValue SHR 16) AND $FF;
   result  := (vRed SHL 16) OR (vGreen SHL 8) OR vBlue;
+end;
+
+function RGBtoBGR(const aRGBValue: integer): integer;
+begin
+  var vRed:   byte := (aRGBValue SHR 16) AND $FF;
+  var vGreen: byte := (aRGBValue SHR 8) AND $FF;
+  var vBlue:  byte := aRGBValue AND $FF;
+  result := (vBlue SHL 16) OR (vGreen SHL 8) OR vRed;
 end;
 
 function getColorValue(const aKeyName: string; const aDefault: integer): integer;
 begin
-  result := aDefault;
+  result := RGBtoBGR(aDefault);
   case fileExists(getExePath + CM_INI_COLORS) of FALSE: EXIT; end;
   var vSL := TStringlist.create;
   try
@@ -296,8 +300,7 @@ begin
     vSL.loadFromFile(getExePath + CM_INI_COLORS);
     var vRGB: integer;
     try vRGB := strToIntDef(vSL.values[aKeyName], aDefault); except result := 0; end;
-//    case vRGB > 0 of FALSE: EXIT; end;
-    result := BGRtoRGB(vRGB);
+    result := RGBtoBGR(vRGB);
   finally
     vSL.free;
   end;
@@ -305,17 +308,17 @@ end;
 
 function getBackgroundColor: integer;
 begin
-  result := getColorValue('backgroundColor', CM_BACKGROUND_COLOR);
+  result := getColorValue('backgroundColor', BGRtoRGB(CM_BACKGROUND_COLOR));
 end;
 
 function getHighlightColor: integer;
 begin
-  result := getColorValue('highlightColor', CM_HIGHLIGHT_COLOR);
+  result := getColorValue('highlightColor', BGRtoRGB(CM_HIGHLIGHT_COLOR));
 end;
 
 function getInfoColor: integer;
 begin
-  result := getColorValue('infoColor', CM_INFO_COLOR);
+  result := getColorValue('infoColor', BGRtoRGB(CM_INFO_COLOR));
 end;
 
 function getExePath: string;

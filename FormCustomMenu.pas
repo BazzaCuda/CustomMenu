@@ -80,8 +80,10 @@ type
     FListBoxWndProc: TWndMethod;
 
     FCtrlClickActivate: boolean;
+
     FBackgroundColor: integer;
-    FHighlightColor: integer;
+    FHighlightColor:  integer;
+    FInfoColor:       integer;
 
     var FOldHintIx: integer;
     procedure listBoxWndProc(var Msg: TMessage);
@@ -93,6 +95,7 @@ type
     function  buildMenu(menuType: TMenuType; extraInfo: array of string): boolean;
     function  closeApp: boolean;
     function  configListBox: boolean;
+    function  getColors: boolean;
     function  hookOff: boolean;
     function  setMouseTrap: boolean;
     function  shutForm: boolean;
@@ -513,7 +516,7 @@ end;
 
 function TCustomMenu.buildAndShowTheMenu: boolean;
 begin
-  case GREFRESH of TRUE: begin itemDataclear(itemData); itemData.clear; imageList1.Clear; hWNDs.Clear; listBox.Clear; end;end;
+  case GREFRESH of TRUE: begin itemDataclear(itemData); itemData.clear; imageList1.Clear; hWNDs.Clear; listBox.Clear; getColors; end;end;
   case GFIRST or GREFRESH of  TRUE: result := buildMenu(mtINI, [getINIFileName, '']);  // builds the main menu once. For subMenus, buildMenu will be called in openSubMenu
                              FALSE: result := TRUE; end; // because subsequent calls don't call buildMenu unless GREFRESH is TRUE
   GFIRST := FALSE; GREFRESH := FALSE;
@@ -623,7 +626,7 @@ end;
 
 function TCustomMenu.configListBox: boolean;
 begin
-  listBox.Color       := FBackgroundColor;
+//  listBox.Color       := FBackgroundColor;
   listBox.Align       := alTop;
   listBox.BorderStyle := bsNone; // We draw a subtle border in WMNCPaint
   listBox.BevelInner  := bvNone;
@@ -757,8 +760,7 @@ begin
   case GFIRST of TRUE: ShowTrayIcon(trayIcon); end;
   FOldHintIx := -1;
 
-  FBackgroundColor  := getBackgroundColor;
-  FHighlightColor   := getHighlightColor;
+  getColors;
 
   configListBox;
 
@@ -794,6 +796,14 @@ begin
   case bottomPanel.visible of FALSE: EXIT; end;
   case listBox.topIndex = 0 of TRUE: EXIT; end;
   btnUp.click;
+end;
+
+function TCustomMenu.getColors: boolean;
+begin
+  FBackgroundColor  := getBackgroundColor;
+  FHighlightColor   := getHighlightColor;
+  FInfoColor        := getInfoColor;
+  listBox.Color     := FBackgroundColor;
 end;
 
 procedure TCustomMenu.listBoxDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
@@ -843,7 +853,11 @@ begin
   var vCenterText: integer := (Rect.Bottom - Rect.Top - listbox.Canvas.TextHeight(text)) div 2;
   listbox.Canvas.TextOut(Rect.left + LEFT_TEXT_MARGIN, Rect.Top + vCenterText, vText); // add additional 8-pixel space for a gap before and after the icon
 
-  case id.idSubMenu of TRUE: imageList2.Draw(listbox.Canvas, Rect.Right - CHEVRON_MARGIN, Rect.Top + VERT_MARGIN, 0); end; // draw the transparent chevron icon
+//  case id.idSubMenu of TRUE: imageList2.Draw(listbox.Canvas, Rect.Right - CHEVRON_MARGIN, Rect.Top + VERT_MARGIN, 0); end; // draw the transparent chevron icon
+  case id.idSubMenu of TRUE:  begin
+                                listBox.canvas.font.color := FInfoColor;
+                                listBox.canvas.font.size  := listBox.canvas.font.size + 2;
+                                listbox.Canvas.TextOut(Rect.Right - CHEVRON_MARGIN, Rect.Top + VERT_MARGIN - 4, '>'); end;end;
 
   case id.idSeparatorAfter of TRUE: begin
                                       listBox.Canvas.pen.Color := clGray;

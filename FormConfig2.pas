@@ -16,7 +16,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA
 }
-unit FormConfig;
+unit FormConfig2;
 
 interface
 
@@ -108,18 +108,69 @@ type
     lblInfoColor: TLabel;
     lblColors: TLabel;
     btnColorDefaults: TButton;
-    lblIsSubMenu: TLabel;
-    pnlBackgroundColor: TPanel;
-    pnlHighlightColor: TPanel;
-    pnlInfoColor: TPanel;
-    lblHelp: TLabel;
-    lblFeedback: TLabel;
-    bottomBevel: TBevel;
-    lblMenuItem: TLabel;
+    Panel1: TPanel;
+    Bevel1: TBevel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
     Label1: TLabel;
     Label2: TLabel;
-    bvlColors: TBevel;
-    lblEscapeToClose: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Image1: TImage;
+    Image2: TImage;
+    Bevel2: TBevel;
+    bvlNew: TBevel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Bevel4: TBevel;
+    Label15: TLabel;
+    Label16: TLabel;
+    SpeedButton4: TSpeedButton;
+    Label17: TLabel;
+    Label18: TLabel;
+    lblFeedback: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    lblHelp: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    ComboBox1: TComboBox;
+    ComboBox2: TComboBox;
+    LabeledEdit1: TLabeledEdit;
+    LabeledEdit2: TLabeledEdit;
+    LabeledEdit3: TLabeledEdit;
+    SpinEdit1: TSpinEdit;
+    LabeledEdit4: TLabeledEdit;
+    LabeledEdit5: TLabeledEdit;
+    LabeledEdit6: TLabeledEdit;
+    Panel2: TPanel;
+    lblIsSubMenu: TLabel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    BitBtn5: TBitBtn;
+    ComboBox3: TComboBox;
+    LabeledEdit7: TLabeledEdit;
+    Button6: TButton;
+    pnlHighlightColor: TPanel;
+    pnlInfoColor: TPanel;
+    Button7: TButton;
+    pnlBackgroundColor: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -186,7 +237,6 @@ type
 
     function  actionThisIcon(iconFile: string; iconIx: integer): boolean;
     function  capitalize(const aString: string): string;
-    procedure checkForColorChange;
     function  checkIfStillSubMenu(aNode: PVirtualNode): boolean;
     function  checkNodeParentage: boolean;
     function  checkSaves: boolean;
@@ -201,7 +251,6 @@ type
     function  populateBoxesFromLnk(lnkFilePath: string): boolean;
     function  populateCommandCategories: boolean;
     function  populateCommandList(commands: TArray<string>): boolean;
-    function  saveColors: boolean;
     procedure saveNode(Sender: TBaseVirtualTree; Node: PVirtualNode; Data: Pointer; var Abort: Boolean);
     function  saveTree(vst: TVirtualStringTree): boolean;
     procedure saveNodeToRegistry(Sender: TBaseVirtualTree; Node: PVirtualNode; Data: Pointer; var Abort: Boolean);
@@ -212,7 +261,6 @@ type
     function  setDragHint(DataObject: IDataObject; const Value: string; Effect: Integer): boolean;
     function  setWindowCaption: boolean;
     function  updateMenuIcon: boolean;
-    function doSaves: boolean;
 
     //========== VCL Event Handlers ===========
   protected
@@ -228,7 +276,7 @@ function enableConfigForm: boolean;
 implementation
 
 uses _debugWindow, VirtualTrees.Types, WinAPI.ShellAPI, system.win.comobj, FormIconExplorer, FormCustomMenu, System.Win.Registry, winShell, runElevatedSupport,
-     shellFoldersDef, mmcDef, mmcServerDef, cpl1Def, cpl2Def, runDll32Def, msSettingsDef, shellGuidsDef, system.strUtils, system.IOUtils;
+     shellFoldersDef, mmcDef, mmcServerDef, cpl1Def, cpl2Def, runDll32Def, msSettingsDef, shellGuidsDef, system.strUtils;
 
 var configForm: TConfigForm;
     FCurrentIx: integer = -1; // when loading all the data and the icons, FCurrentIx and all "for i" loop variables will match for all the
@@ -488,42 +536,10 @@ begin
   end;
 end;
 
-function TConfigForm.saveColors: boolean;
-begin
-  var vSL := TStringList.create;
-  try
-    vSL.values['backgroundColor'] := colorToRGBHex(FBackgroundColor);
-    vSL.values['highlightColor']  := colorToRGBHex(FHighlightColor);
-    vSL.values['infoColor']       := colorToRGBHex(FInfoColor);
-    vSL.saveToFile(getExePath + CM_INI_COLORS);
-  finally
-    vSL.free;
-  end;
-end;
-
-procedure TConfigForm.btnColorDefaultsClick(Sender: TObject);
-begin
-  FBackgroundColor  := CM_BACKGROUND_COLOR;
-  FHighlightColor   := CM_HIGHLIGHT_COLOR;
-  FInfoColor        := CM_INFO_COLOR;
-  setColors;
-  enableSaveButton(TRUE);
-  vst.SetFocus;
-end;
-
-procedure TConfigForm.checkForColorChange;
-begin
-  enableSaveButton(btnSave.enabled
-                    or (pnlBackgroundColor.color  <> FBackgroundColor)
-                    or (pnlHighlightColor.color   <> FHighlightColor)
-                    or (lblMenuItem.color         <> FInfoColor)
-                  );
-end;
-
 procedure TConfigForm.pnlBackgroundColorClick(Sender: TObject);
 begin
   pnlBackgroundColor.color := chooseColor(pnlBackGroundColor.color);
-  checkForColorChange;
+  enableSaveButton(btnSave.enabled or (pnlBackgroundColor.color <> FBackgroundColor)); // has the value changed?
   FBackgroundColor := pnlBackgroundColor.color;
   setColors;
 end;
@@ -531,7 +547,7 @@ end;
 procedure TConfigForm.pnlHighlightColorClick(Sender: TObject);
 begin
   pnlHighlightColor.color := chooseColor(pnlHighlightColor.color);
-  checkForColorChange;
+  enableSaveButton(btnSave.enabled or (pnlHighlightColor.color <> FHighlightColor)); // has the value changed?
   FHighlightColor := pnlHighlightColor.color;
   setColors;
 end;
@@ -539,7 +555,7 @@ end;
 procedure TConfigForm.pnlInfoColorClick(Sender: TObject);
 begin
   pnlInfoColor.color := chooseColor(pnlInfoColor.color);
-  checkForColorChange;
+  enableSaveButton(btnSave.enabled or (pnlInfoColor.color <> FInfoColor)); // has the value changed?
   FInfoColor := pnlInfoColor.color;
   setColors;
 end;
@@ -930,7 +946,7 @@ begin
   treePanel.color                       := FBackgroundColor;
   buttonPanel.color                     := FBackgroundColor;
   editPanel.color                       := FBackgroundColor;
-  lblMenuItem.color                     := FBackgroundColor;
+  panel1.color                          := FBackgroundColor;
 
   lblDragAndDrop.font.color             := FInfoColor;
   lblDragDropIconFile.font.color        := FInfoColor;
@@ -951,27 +967,14 @@ begin
   lblHighlightColor.font.color          := FInfoColor;
   lblInfoColor.font.color               := FInfoColor;
   lblColors.font.color                  := FInfoColor;
-  lblEscapeToClose.font.color           := FInfoColor;
 
   pnlBackgroundColor.styleElements      := [];
   pnlHighlightColor.styleElements       := [];
   pnlInfoColor.styleElements            := [];
-  vst.styleElements := [];
 
   pnlBackgroundColor.color              := FBackgroundColor;
-  pnlHighlightColor.color               := FBackGroundColor;
-  lblMenuItem.color                     := FHighlightColor;
+  pnlHighlightColor.color               := FHighlightColor;
   pnlInfoColor.Color                    := FInfoColor;
-
-  vst.colors.FocusedSelectionColor          := FHighlightColor;
-  vst.colors.FocusedSelectionBorderColor    := FHighlightColor;
-  vst.colors.SelectionRectangleBlendColor   := FHighlightColor;
-  vst.colors.SelectionRectangleBorderColor  := FHighlightColor;
-  vst.colors.UnfocusedSelectionColor        := FBackgroundColor;
-  vst.colors.UnfocusedSelectionBorderColor  := FBackgroundColor;
-  vst.colors.SelectionTextColor             := clWhite;
-
-  vst.invalidate;
 end;
 
 function TConfigForm.setDragHint(DataObject: IDataObject; const Value: string; Effect: Integer): boolean;
@@ -1028,6 +1031,14 @@ function TConfigForm.setWindowCaption: boolean;
 begin
   case btnSave.enabled of  TRUE: caption := getDirtyCaption;
                           FALSE: caption := getCleanCaption; end;
+end;
+
+procedure TConfigForm.btnColorDefaultsClick(Sender: TObject);
+begin
+  FBackgroundColor  := CM_BACKGROUND_COLOR;
+  FHighlightColor   := CM_HIGHLIGHT_COLOR;
+  FInfoColor        := CM_INFO_COLOR;
+  setColors;
 end;
 
 procedure TConfigForm.btnCopyMenuItemClick(Sender: TObject);
@@ -1163,7 +1174,7 @@ end;
 
 procedure TConfigForm.btnSaveClick(Sender: TObject);
 begin
-  doSaves;
+  saveTree(vst);
   enableSaveButton(FALSE);
   enableSaveRegistryButton(TRUE); // once they've saved their changes, we let them save to the registry.
   enableShowMenuButton(vst.totalCount > 0);
@@ -1337,26 +1348,11 @@ begin
   SetForegroundWindow(mainMenu.handle);
 end;
 
-function TConfigForm.doSaves: boolean;
-var vPathName: string;
-begin
-  var vName   := TPath.GetFileNameWithoutExtension(CM_INI_FILE_NAME);
-  var vFileIx := 0;
-  repeat
-    inc(vFileIx);
-    vPathName := format('%s%s(%d).bak', [getExePath, vName, vFileIx]);
-  until NOT fileExists(vPathName);
-
-  case fileExists(getExePath + CM_INI_FILE_NAME) of TRUE: TFile.copy(getExePath + CM_INI_FILE_NAME, vPathName); end;
-  saveTree(vst);
-  saveColors;
-end;
-
 function TConfigForm.checkSaves: boolean;
 begin
   case btnSave.enabled of TRUE: begin
                                   var msg := 'You have unsaved changes.'#13#10'Do want to save them before closing?';
-                                  case vcl.dialogs.messageDlg(msg, mtWarning, [mbYes, mbNo], 0, mbNo) = mrYes of TRUE: doSaves; end;end;end;
+                                  case vcl.dialogs.messageDlg(msg, mtWarning, [mbYes, mbNo], 0, mbNo) = mrYes of TRUE: saveTree(vst); end;end;end;
   enableSaveButton(FALSE);
 end;
 
@@ -1773,7 +1769,7 @@ procedure TConfigForm.FormResize(Sender: TObject);
 begin
   editPanel.top       := (backPanel.height - editPanel.height) div 2;
   topBevel.visible    := height > FInitialHeight;
-  bottomBevel.visible := height > FInitialHeight;
+//  bottomBevel.visible := height > FInitialHeight;
 end;
 
 procedure TConfigForm.FormShow(Sender: TObject);

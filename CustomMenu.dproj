@@ -152,9 +152,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         </DCCReference>
         <DCCReference Include="Winapi.Hooks.pas"/>
         <DCCReference Include="CustomMenuCommon.pas"/>
-        <DCCReference Include="FormConfig.pas">
-            <Form>ConfigForm</Form>
-        </DCCReference>
         <DCCReference Include="..\DebugWindow\_debugWindow.pas"/>
         <DCCReference Include="FormIconExplorer.pas">
             <Form>IconExplorerForm</Form>
@@ -173,6 +170,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <Form>HotkeyForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="FormConfig.pas"/>
         <None Include="bazDebugWindow.inc"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
