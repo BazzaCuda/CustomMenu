@@ -1947,6 +1947,7 @@ object IconExplorerForm: TIconExplorerForm
         VETColors.FolderTextColor = clWhite
         VETColors.FileTextColor = clWhite
         OnChange = TreeChange
+        OnClick = TreeClick
         Columns = <>
       end
     end
@@ -2076,9 +2077,13 @@ object IconExplorerForm: TIconExplorerForm
         ThumbsManager.StorageFilename = 'Thumbnails.album'
         View = elsReport
         OnColumnPaintText = LVColumnPaintText
+        OnDblClick = LVDblClick
         OnItemClick = LVItemClick
-        OnItemInitialize = LVItemInitialize
+        OnItemDblClick = LVItemDblClick
         OnItemSelectionChanged = LVItemSelectionChanged
+        ExplicitLeft = 3
+        ExplicitTop = 2
+        ExplicitHeight = 167
       end
       object filterPanel: TPanel
         Left = 0
@@ -2104,7 +2109,7 @@ object IconExplorerForm: TIconExplorerForm
           BevelEdges = []
           BevelInner = bvNone
           BevelOuter = bvNone
-          Style = csOwnerDrawFixed
+          Style = csOwnerDrawVariable
           Anchors = [akRight, akBottom]
           Color = 2829099
           Font.Charset = DEFAULT_CHARSET
@@ -2112,10 +2117,8 @@ object IconExplorerForm: TIconExplorerForm
           Font.Height = -12
           Font.Name = 'Segoe UI'
           Font.Style = []
-          ItemIndex = 0
           ParentFont = False
           TabOrder = 0
-          Text = 'DLLs, EXEs, CPLs (*.dll,*.exe,*.cpl)'
           OnChange = filterComboChange
           OnDrawItem = filterComboDrawItem
           OnKeyPress = filterComboKeyPress
@@ -2123,6 +2126,7 @@ object IconExplorerForm: TIconExplorerForm
             'DLLs, EXEs, CPLs (*.dll,*.exe,*.cpl)'
             'DRVs, OCXs (*.drv,*.ocx)'
             'Icon Libraries (*.icl)'
+            'Icon Files (*.ico)'
             'All Files (*.*)')
         end
       end

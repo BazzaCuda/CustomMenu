@@ -1297,10 +1297,14 @@ var
   vIconFile: string;
   vIconIx:   integer;
 begin
-  FormIconExplorer.GFilePath := extractFilePath(expandEnvs(editIconFile.text));
+  var vStartingFilePath := extractFilePath(expandEnvs(editIconFile.text));
+  case trim(vStartingFilePath) = '' of TRUE: vStartingFilePath := 'C:\'; end;
+//  {$if BazDebugWindow} vStartingFilePath := 'C:\Windows\System32\'; {$endif}
+//  {$if BazDebugWindow} vStartingFilePath := 'B:\images\'; {$endif}
+
   enableWindow(handle, FALSE);
   try
-    case showIconExplorer(vIconFile, vIconIx) of TRUE: actionThisIcon(vIconFile, vIconIx); end;
+    case showIconExplorer(vStartingFilePath, vIconFile, vIconIx) of TRUE: actionThisIcon(vIconFile, vIconIx); end;
   finally
     enableWindow(handle, TRUE);
   end;

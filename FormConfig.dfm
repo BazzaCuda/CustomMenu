@@ -1819,7 +1819,6 @@ object ConfigForm: TConfigForm
     ParentBackground = False
     ParentCtl3D = False
     TabOrder = 0
-    ExplicitHeight = 637
     DesignSize = (
       828
       658)
@@ -1863,7 +1862,6 @@ object ConfigForm: TConfigForm
       ParentBackground = False
       ParentFont = False
       TabOrder = 0
-      ExplicitHeight = 637
       object buttonPanel: TPanel
         Left = 0
         Top = 632
@@ -1873,7 +1871,6 @@ object ConfigForm: TConfigForm
         BevelOuter = bvNone
         Color = 2829099
         TabOrder = 0
-        ExplicitTop = 611
         object btnMoveMenuItemUp: TSpeedButton
           Left = 11
           Top = 1
@@ -4372,24 +4369,22 @@ object ConfigForm: TConfigForm
         object Label1: TLabel
           Left = 1
           Top = 1
-          Width = 103
+          Width = 74
           Height = 17
           Align = alTop
           Caption = '   Menu Item'
           Transparent = True
           OnClick = pnlHighlightColorClick
-          ExplicitWidth = 74
         end
         object Label2: TLabel
           Left = 1
           Top = 31
-          Width = 103
+          Width = 74
           Height = 17
           Align = alBottom
           Caption = '   Menu Item'
           Transparent = True
           OnClick = pnlHighlightColorClick
-          ExplicitWidth = 74
         end
       end
       object pnlInfoColor: TPanel
