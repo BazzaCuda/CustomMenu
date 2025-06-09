@@ -1915,7 +1915,6 @@ object IconExplorerForm: TIconExplorerForm
         DefaultNodeHeight = 22
         DragHeight = 250
         DragWidth = 150
-        FileObjects = [foFolders, foEnableAsync]
         FileSizeFormat = fsfExplorer
         FileSort = fsFileType
         Font.Charset = DEFAULT_CHARSET
@@ -1942,7 +1941,7 @@ object IconExplorerForm: TIconExplorerForm
         TreeOptions.VETFolderOptions = [toFoldersExpandable, toForceHideRecycleBin, toThreadedExpandMark]
         TreeOptions.VETShellOptions = [toRightAlignSizeColumn]
         TreeOptions.VETSyncOptions = [toExpandTarget, toSelectTarget]
-        TreeOptions.VETMiscOptions = [toBrowseExecuteFolder, toBrowseExecuteFolderShortcut, toChangeNotifierThread]
+        TreeOptions.VETMiscOptions = [toBrowseExecuteFolder, toBrowseExecuteFolderShortcut]
         TreeOptions.VETImageOptions = [toImages, toThreadedImages]
         VETColors.FolderTextColor = clWhite
         VETColors.FileTextColor = clWhite
@@ -2077,13 +2076,9 @@ object IconExplorerForm: TIconExplorerForm
         ThumbsManager.StorageFilename = 'Thumbnails.album'
         View = elsReport
         OnColumnPaintText = LVColumnPaintText
-        OnDblClick = LVDblClick
         OnItemClick = LVItemClick
         OnItemDblClick = LVItemDblClick
         OnItemSelectionChanged = LVItemSelectionChanged
-        ExplicitLeft = 3
-        ExplicitTop = 2
-        ExplicitHeight = 167
       end
       object filterPanel: TPanel
         Left = 0

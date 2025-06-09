@@ -136,7 +136,7 @@
         <Icon_MainIcon>res\menu.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>res\menu.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>res\menu.png</UWP_DelphiLogo150>
-        <DCC_Define>UNICODE;$(DCC_Define)</DCC_Define>
+        <DCC_Define>UNICODE;DISABLE_ACCESSIBILITY;$(DCC_Define)</DCC_Define>
         <PostBuildEvent><![CDATA[copy $(OUTPUTPATH) $(PROJECTDIR)\SampleMenu\
 :: copy $(OUTPUTPATH) F:\
 $(PostBuildEvent)]]></PostBuildEvent>

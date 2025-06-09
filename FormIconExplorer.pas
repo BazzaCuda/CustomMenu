@@ -76,7 +76,6 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure TreeClick(Sender: TObject);
     procedure LVItemDblClick(Sender: TCustomEasyListview; Button: TCommonMouseButton; MousePos: TPoint; HitInfo: TEasyHitInfoItem);
-    procedure LVDblClick(Sender: TCustomEasyListview; Button: TCommonMouseButton; MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
   private
     NumberOfIcons: LongInt;
 
@@ -129,7 +128,7 @@ end;
 function TIconExplorerForm.applyFilter(const bShowAll: boolean = FALSE): boolean;
 begin
 //  debugString('applyFilter', filterCombo.items[filterCombo.itemIndex]);
-//  lv.BeginUpdate;
+try
   try
     for var i := 0 to lv.ItemCount - 1 do begin
   //    debugString('lv.item', lv.items[i].caption);
@@ -137,10 +136,10 @@ begin
       lv.items[i].visible := bShowAll or (vExt = '') or (filterCombo.items[filterCombo.itemIndex].contains('*.*')) or (filterCombo.items[filterCombo.itemIndex].contains(vExt));
       lv.items[i].Invalidate(TRUE);
     end;
-  lv.RereadAndRefresh(FALSE);
+    lv.RereadAndRefresh(FALSE);
   finally
-//    lv.EndUpdate;
   end;
+except end;
 end;
 
 procedure TIconExplorerForm.IconViewDblClick(Sender: TObject);
@@ -193,7 +192,7 @@ var
   ListItem:   TListItem;
 begin
   case trim(IFName) = ''  of TRUE:  EXIT; end;
-  case FileExists(IFName) of FALSE: EXIT; end;
+  case FileExists(IFName) of FALSE: EXIT; end; // all folders will fail this
 
   OldCursor := Screen.Cursor;
   Screen.CurSor := crHourGlass;
@@ -249,13 +248,14 @@ begin
 //  LV.ThumbsManager.StorageRepositoryFolder := IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'AlbumsRepository';
   // Register some special Folders that the thread will be able to generate
   // notification PIDLs for Virtual Folders too.
-//  ChangeNotifier.RegisterKernelChangeNotify(LV, AllKernelNotifiers);  // EXPERIMENTAL
-//  ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_DESKTOP);
-//  ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_PERSONAL);
-//  ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_COMMON_DOCUMENTS);
+  ChangeNotifier.RegisterKernelChangeNotify(LV, AllKernelNotifiers);  // EXPERIMENTAL
+  ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_DESKTOP);
+  ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_PERSONAL);
+  ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_COMMON_DOCUMENTS);
   iconLabel.caption := 'Find and select a file which contains icons';
 
   filterCombo.itemIndex := 0;
+  tree.FileObjects := [foFolders];
 
   setColors;
 end;
@@ -288,45 +288,47 @@ begin
   case lowerCase(column.caption) = 'date modified' of TRUE: column.caption := 'Modified'; end;
 end;
 
-procedure TIconExplorerForm.LVDblClick(Sender: TCustomEasyListview; Button: TCommonMouseButton; MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
-begin
-//
-end;
-
 function isFolder(const aPath: string): boolean;
 begin
   result := FALSE;
-  var vFileAttributes: cardinal := getFileAttributes(PChar(aPath));
-  case vFileAttributes = INVALID_FILE_ATTRIBUTES of TRUE: EXIT; end;
-  result := faDirectory and vFileAttributes <> 0
+//  var vFileAttributes: cardinal := getFileAttributes(PChar(aPath));
+//  case vFileAttributes = INVALID_FILE_ATTRIBUTES of TRUE: EXIT; end;
+//  result := faDirectory and vFileAttributes <> 0
 end;
 
 procedure TIconExplorerForm.LVItemClick(Sender: TCustomEasyListview; Item: TEasyItem; KeyStates: TCommonKeyStates; HitInfo: TEasyItemHitTestInfoSet);
 // lv.selectedPath can be the fully qualified path to a file name, as well as a folder
 begin
 //  debugString('lv.selectedPath', lv.selectedPath);
+try
   case isFolder(lv.selectedPath) of          TRUE:  tree.browseTo(lv.selectedPath);
                                             FALSE:  begin
                                                       IconFName := lv.selectedPath;
                                                       IconViewLoadIcons(lv.selectedPath); end;end;
+except end;
 end;
 
 procedure TIconExplorerForm.LVItemDblClick(Sender: TCustomEasyListview; Button: TCommonMouseButton; MousePos: TPoint; HitInfo: TEasyHitInfoItem);
 // lv.selectedPath can be the fully qualified path to a file name, as well as a folder
 begin
+  EXIT; // let LV handle double-clicks to go into a folder
+try
   case isFolder(lv.selectedPath) of          TRUE:  tree.browseTo(lv.selectedPath);
                                             FALSE:  begin
                                                       IconFName := lv.selectedPath;
                                                       IconViewLoadIcons(lv.selectedPath); end;end;
+except end;
 end;
 
 procedure TIconExplorerForm.LVItemSelectionChanged(Sender: TCustomEasyListview; Item: TEasyItem);
 // lv.selectedPath can be the fully qualified path to a file name, as well as a folder
 begin
+try
   case isFolder(lv.selectedPath) of          TRUE:  begin end; // ignore a single click on a folder
                                             FALSE:  begin
                                                       IconFName := lv.selectedPath;
                                                       IconViewLoadIcons(lv.selectedPath); end;end;
+except end;
 end;
 
 function TIconExplorerForm.setColors: boolean;
@@ -389,6 +391,7 @@ begin
 //  try
 //    lv.rebuild; // EXPERIMENTAL
 //  except end;
+try
   lv.BeginUpdate;
   try
     applyFilter(TRUE);
@@ -396,11 +399,13 @@ begin
   finally
     lv.EndUpdate(FALSE);
   end;
-  addressLabel.caption := tree.selectedPath; {experimental}
+  addressLabel.caption := tree.selectedPath;
+except end;
 end;
 
 procedure TIconExplorerForm.TreeClick(Sender: TObject);
 begin
+try
 //  debugString('tree.selectedPath', tree.selectedPath);
   lv.browseTo(IncludeTrailingBackslash(tree.selectedPath), FALSE);
   lv.BeginUpdate;
@@ -410,10 +415,12 @@ begin
   finally
     lv.EndUpdate(FALSE);
   end;
+except end;
 end;
 
 procedure TIconExplorerForm.filterComboChange(Sender: TObject);
 begin
+try
   lv.BeginUpdate;
   try
     applyFilter(TRUE);
@@ -421,6 +428,7 @@ begin
   finally
     lv.EndUpdate(FALSE);
   end;
+except end;
 end;
 
 procedure TIconExplorerForm.filterComboDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
