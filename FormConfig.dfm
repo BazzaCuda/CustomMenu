@@ -4369,22 +4369,24 @@ object ConfigForm: TConfigForm
         object Label1: TLabel
           Left = 1
           Top = 1
-          Width = 74
+          Width = 103
           Height = 17
           Align = alTop
           Caption = '   Menu Item'
           Transparent = True
           OnClick = pnlHighlightColorClick
+          ExplicitWidth = 74
         end
         object Label2: TLabel
           Left = 1
           Top = 31
-          Width = 74
+          Width = 103
           Height = 17
           Align = alBottom
           Caption = '   Menu Item'
           Transparent = True
           OnClick = pnlHighlightColorClick
+          ExplicitWidth = 74
         end
       end
       object pnlInfoColor: TPanel
@@ -4704,5 +4706,10 @@ object ConfigForm: TConfigForm
   object popupMenu: TPopupMenu
     Left = 232
     Top = 48
+  end
+  object ApplicationEvents: TApplicationEvents
+    OnActivate = ApplicationEventsActivate
+    Left = 168
+    Top = 464
   end
 end

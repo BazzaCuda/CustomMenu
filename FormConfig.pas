@@ -28,7 +28,7 @@ uses
   Vcl.Buttons, Vcl.Imaging.pngimage, Vcl.Menus, VirtualTrees, WinAPI.ActiveX,
   Vcl.Samples.Spin,
 
-  Clipbrd, WinAPI.ShlObj, Vcl.Mask;
+  Clipbrd, WinAPI.ShlObj, Vcl.Mask, Vcl.AppEvnts;
 
 type
   TConfigForm = class(TForm)
@@ -120,6 +120,7 @@ type
     Label2: TLabel;
     bvlColors: TBevel;
     lblEscapeToClose: TLabel;
+    ApplicationEvents: TApplicationEvents;
     procedure FormCreate(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -170,6 +171,7 @@ type
     procedure pnlHighlightColorClick(Sender: TObject);
     procedure pnlInfoColorClick(Sender: TObject);
     procedure btnColorDefaultsClick(Sender: TObject);
+    procedure ApplicationEventsActivate(Sender: TObject);
   private
     itemData:       TList<TItemData>;
     FDropPoint:     TPoint;
@@ -885,6 +887,11 @@ end;
 {$R *.dfm}
 
 //========== VCL Event Handlers ===========
+procedure TConfigForm.ApplicationEventsActivate(Sender: TObject);
+begin
+  case showingIconExplorer of TRUE: focusIconExplorer; end;
+end;
+
 procedure TConfigForm.btnAddMenuItemClick(Sender: TObject);
 var
   sel:     PVirtualNode;

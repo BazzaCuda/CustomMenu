@@ -1809,6 +1809,7 @@ object IconExplorerForm: TIconExplorerForm
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyUp = FormKeyUp
+  OnResize = FormResize
   OnShow = FormShow
   TextHeight = 17
   object backPanel: TPanel
@@ -1938,15 +1939,16 @@ object IconExplorerForm: TIconExplorerForm
         TreeOptions.AutoOptions = [toAutoDropExpand, toAutoExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoDeleteMovedNodes, toAutoChangeScale]
         TreeOptions.MiscOptions = [toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
         TreeOptions.PaintOptions = [toHideFocusRect, toShowButtons, toShowRoot, toUseBlendedImages]
-        TreeOptions.VETFolderOptions = [toFoldersExpandable, toForceHideRecycleBin, toThreadedExpandMark]
+        TreeOptions.VETFolderOptions = [toFoldersExpandable, toForceHideRecycleBin, toForceShowMyDocuments, toDisableGhostedFolders, toThreadedExpandMark]
         TreeOptions.VETShellOptions = [toRightAlignSizeColumn]
         TreeOptions.VETSyncOptions = [toExpandTarget, toSelectTarget]
-        TreeOptions.VETMiscOptions = [toBrowseExecuteFolder, toBrowseExecuteFolderShortcut]
+        TreeOptions.VETMiscOptions = [toBrowseExecuteFolder]
         TreeOptions.VETImageOptions = [toImages, toThreadedImages]
         VETColors.FolderTextColor = clWhite
         VETColors.FileTextColor = clWhite
         OnChange = TreeChange
         OnClick = TreeClick
+        OnInitNode = TreeInitNode
         Columns = <>
       end
     end
@@ -2077,7 +2079,6 @@ object IconExplorerForm: TIconExplorerForm
         View = elsReport
         OnColumnPaintText = LVColumnPaintText
         OnItemClick = LVItemClick
-        OnItemDblClick = LVItemDblClick
         OnItemSelectionChanged = LVItemSelectionChanged
       end
       object filterPanel: TPanel

@@ -748,7 +748,7 @@ end;
 procedure TCustomMenu.FormActivate(Sender: TObject);
 // the app starts with the main menu/app window hidden until the user right-clicks the desktop
 begin
-  case GFIRST of TRUE: SetWindowPos(handle, HWND_BOTTOM, 0, 0, 0, 0, SWP_HIDEWINDOW OR SWP_NOMOVE OR SWP_NOSIZE); end;
+  case GFIRST of TRUE: setWindowPos(handle, HWND_BOTTOM, 0, 0, 0, 0, SWP_HIDEWINDOW OR SWP_NOMOVE OR SWP_NOSIZE); end;
   case GFIRST of TRUE: setMouseTrap; end;
 end;
 

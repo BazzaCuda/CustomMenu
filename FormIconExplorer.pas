@@ -75,7 +75,8 @@ type
     procedure btnCancelClick(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure TreeClick(Sender: TObject);
-    procedure LVItemDblClick(Sender: TCustomEasyListview; Button: TCommonMouseButton; MousePos: TPoint; HitInfo: TEasyHitInfoItem);
+    procedure FormResize(Sender: TObject);
+    procedure TreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
   private
     NumberOfIcons: LongInt;
 
@@ -86,6 +87,7 @@ type
     function  applyFilter(const bShowAll: boolean = FALSE): boolean;
     procedure iconViewLoadIcons(IFName: string);
     function  setColors: boolean;
+    function  updateAddress(const aCaption: string): boolean;
   public
     IconFName, IconFExt: string;
     IsBmp, IsIco: Boolean;
@@ -93,6 +95,8 @@ type
   end;
 
 function showIconExplorer(const aStartingFilePath: string; var vSelectedFilePath: string; var vIconIx: integer): boolean;
+function showingIconExplorer: boolean;
+function focusIconExplorer: boolean;
 
 implementation
 
@@ -101,11 +105,21 @@ uses
   customMenuCommon;
 
 var
-  iconExplorerForm: TiconExplorerForm;
   GFilePath:        string;
   GIconIx:          integer;
+  GHWND:            integer;
 
 {$R *.dfm}
+
+function showingIconExplorer: boolean;
+begin
+  result := GHWND <> -1;
+end;
+
+function focusIconExplorer: boolean;
+begin
+  setForegroundWindow(GHWND);
+end;
 
 function showIconExplorer(const aStartingFilePath: string; var vSelectedFilePath: string; var vIconIx: integer): boolean;
 var vMr: TModalResult;
@@ -113,7 +127,8 @@ begin
   GFilePath := aStartingFilePath;
   with TIconExplorerForm.create(NIL) do begin
   try
-    vMr := showModal;
+    GHWND := handle;
+    vMr   := showModal;
 
     case vMr = mrOK of TRUE:  begin
                                 vSelectedFilePath := GFilePath;
@@ -122,18 +137,22 @@ begin
     result := vMr = mrOK;
   finally
     free;
+    GHWND := -1;
   end;end;
 end;
 
 function TIconExplorerForm.applyFilter(const bShowAll: boolean = FALSE): boolean;
 begin
-//  debugString('applyFilter', filterCombo.items[filterCombo.itemIndex]);
 try
   try
     for var i := 0 to lv.ItemCount - 1 do begin
-  //    debugString('lv.item', lv.items[i].caption);
       var vExt := trim(lowercase(extractFileExt(lv.items[i].caption)));
-      lv.items[i].visible := bShowAll or (vExt = '') or (filterCombo.items[filterCombo.itemIndex].contains('*.*')) or (filterCombo.items[filterCombo.itemIndex].contains(vExt));
+      lv.items[i].visible := (
+                                bShowAll
+                                or (vExt = '') // assume it's most likely a folder
+                                or (filterCombo.items[filterCombo.itemIndex].contains('*.*'))
+                                or (filterCombo.items[filterCombo.itemIndex].contains(vExt))
+                             );
       lv.items[i].Invalidate(TRUE);
     end;
     lv.RereadAndRefresh(FALSE);
@@ -180,7 +199,7 @@ begin
                                       FALSE: iconImage.Picture.Icon.Handle := ExtractIcon(hInstance, StrPCopy(pFName, IconFName), IconView.Selected.ImageIndex); end;
 
   toolbar.visible := TRUE;
-  iconLabel.caption := 'Click above to apply this icon to your menu item';
+  iconLabel.caption := 'Click above to apply this icon to your menu item'#13;
 end;
 
 procedure TIconExplorerForm.iconViewLoadIcons(IFName: string);
@@ -191,6 +210,11 @@ var
   oldCursor:  TCursor;
   ListItem:   TListItem;
 begin
+  toolbar.visible := FALSE;
+  iconList.clear;
+  IconView.clear;
+  iconImage.picture := NIL;
+
   case trim(IFName) = ''  of TRUE:  EXIT; end;
   case FileExists(IFName) of FALSE: EXIT; end; // all folders will fail this
 
@@ -213,7 +237,7 @@ begin
       Items.Clear;
       ViewStyle := vsIcon;
       LargeImages := IconList;
-      Items.BeginUpdate;
+      Items.beginUpdate;
       try
         for x := 0 to NumberOfIcons - 1 do begin
           Icon := TIcon.Create;
@@ -225,7 +249,7 @@ begin
           Icon.Free;
         end;
       finally
-        Items.EndUpdate;
+        Items.endUpdate;
         IconView.Selected := nil;
       end;
     end;
@@ -248,7 +272,7 @@ begin
 //  LV.ThumbsManager.StorageRepositoryFolder := IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'AlbumsRepository';
   // Register some special Folders that the thread will be able to generate
   // notification PIDLs for Virtual Folders too.
-  ChangeNotifier.RegisterKernelChangeNotify(LV, AllKernelNotifiers);  // EXPERIMENTAL
+  ChangeNotifier.RegisterKernelChangeNotify(LV, AllKernelNotifiers);
   ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_DESKTOP);
   ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_PERSONAL);
   ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_COMMON_DOCUMENTS);
@@ -256,6 +280,7 @@ begin
 
   filterCombo.itemIndex := 0;
   tree.FileObjects := [foFolders];
+  tree.TreeOptions.VETMiscOptions := [toBrowseExecuteFolder];
 
   setColors;
 end;
@@ -265,13 +290,18 @@ begin
   case key = VK_ESCAPE of TRUE: modalResult := mrCancel; end;
 end;
 
+procedure TIconExplorerForm.FormResize(Sender: TObject);
+begin
+  updateAddress(addressLabel.caption);
+end;
+
 procedure TIconExplorerForm.FormShow(Sender: TObject);
 begin
+  setForegroundWindow(SELF.Handle);
   case trim(GFilePath) <> '' of TRUE: begin
                                         tree.browseTo(GFilePath);
                                         lv.BrowseTo(GFilePath, TRUE); end;end;
-//  case trim(GFilePath) <> '' of TRUE: lv.browseTo(GFilePath, TRUE); end; // go directly to the previously-browsed folder
-  addressLabel.caption := GFilePath;
+  updateAddress(GFilePath);
   lv.Rebuild;
   applyFilter(TRUE);
   applyFilter(FALSE);
@@ -288,35 +318,12 @@ begin
   case lowerCase(column.caption) = 'date modified' of TRUE: column.caption := 'Modified'; end;
 end;
 
-function isFolder(const aPath: string): boolean;
-begin
-  result := FALSE;
-//  var vFileAttributes: cardinal := getFileAttributes(PChar(aPath));
-//  case vFileAttributes = INVALID_FILE_ATTRIBUTES of TRUE: EXIT; end;
-//  result := faDirectory and vFileAttributes <> 0
-end;
-
 procedure TIconExplorerForm.LVItemClick(Sender: TCustomEasyListview; Item: TEasyItem; KeyStates: TCommonKeyStates; HitInfo: TEasyItemHitTestInfoSet);
 // lv.selectedPath can be the fully qualified path to a file name, as well as a folder
 begin
-//  debugString('lv.selectedPath', lv.selectedPath);
 try
-  case isFolder(lv.selectedPath) of          TRUE:  tree.browseTo(lv.selectedPath);
-                                            FALSE:  begin
-                                                      IconFName := lv.selectedPath;
-                                                      IconViewLoadIcons(lv.selectedPath); end;end;
-except end;
-end;
-
-procedure TIconExplorerForm.LVItemDblClick(Sender: TCustomEasyListview; Button: TCommonMouseButton; MousePos: TPoint; HitInfo: TEasyHitInfoItem);
-// lv.selectedPath can be the fully qualified path to a file name, as well as a folder
-begin
-  EXIT; // let LV handle double-clicks to go into a folder
-try
-  case isFolder(lv.selectedPath) of          TRUE:  tree.browseTo(lv.selectedPath);
-                                            FALSE:  begin
-                                                      IconFName := lv.selectedPath;
-                                                      IconViewLoadIcons(lv.selectedPath); end;end;
+  IconFName := lv.selectedPath;
+  IconViewLoadIcons(lv.selectedPath);
 except end;
 end;
 
@@ -324,10 +331,8 @@ procedure TIconExplorerForm.LVItemSelectionChanged(Sender: TCustomEasyListview; 
 // lv.selectedPath can be the fully qualified path to a file name, as well as a folder
 begin
 try
-  case isFolder(lv.selectedPath) of          TRUE:  begin end; // ignore a single click on a folder
-                                            FALSE:  begin
-                                                      IconFName := lv.selectedPath;
-                                                      IconViewLoadIcons(lv.selectedPath); end;end;
+  IconFName := lv.selectedPath;
+  IconViewLoadIcons(lv.selectedPath);
 except end;
 end;
 
@@ -380,17 +385,7 @@ procedure TIconExplorerForm.TreeChange(Sender: TBaseVirtualTree; Node: PVirtualN
 //var
 //  NS: TNamespace;
 begin
-//  try
 //    case tree.validateNamespace(Node, NS) of TRUE: {changeNotifier.notifyWatchFolder(LV, NS.nameForParsing);} end;
-//  except end;
-//  lv.browseTo(extractFilePath(NS.nameForParsing), TRUE);
-//  debugString('NS.nameForParsing', NS.NameForParsing);
-
-//  addressLabel.caption := tree.SelectedPath;
-//  debugString('tree.selectedPath', tree.selectedPath);
-//  try
-//    lv.rebuild; // EXPERIMENTAL
-//  except end;
 try
   lv.BeginUpdate;
   try
@@ -399,34 +394,38 @@ try
   finally
     lv.EndUpdate(FALSE);
   end;
-  addressLabel.caption := tree.selectedPath;
+  updateAddress(tree.selectedPath);
 except end;
 end;
 
 procedure TIconExplorerForm.TreeClick(Sender: TObject);
 begin
-try
-//  debugString('tree.selectedPath', tree.selectedPath);
-  lv.browseTo(IncludeTrailingBackslash(tree.selectedPath), FALSE);
-  lv.BeginUpdate;
+  EXIT; // LV already knows!
+end;
+
+procedure TIconExplorerForm.TreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+var NS: TNameSpace;
+begin
   try
-    applyFilter(TRUE);
-    applyFilter(FALSE);
-  finally
-    lv.EndUpdate(FALSE);
-  end;
-except end;
+    case tree.validateNamespace(Node, NS) and NS.archive of TRUE: initialStates := initialStates + [ivsFiltered]; end;
+  except end;
+end;
+
+function TIconExplorerForm.updateAddress(const aCaption: string): boolean;
+begin
+  addressLabel.caption := aCaption;
+  addressLabel.left    := listPanel.left;
 end;
 
 procedure TIconExplorerForm.filterComboChange(Sender: TObject);
 begin
 try
-  lv.BeginUpdate;
+  lv.beginUpdate;
   try
     applyFilter(TRUE);
     applyFilter(FALSE);
   finally
-    lv.EndUpdate(FALSE);
+    lv.endUpdate(FALSE);
   end;
 except end;
 end;
@@ -451,9 +450,9 @@ begin
 end;
 
 initialization
-  iconExplorerForm  := NIL;
   GFilePath         := '';
   GIconIx           := -1;
+  GHWND             := -1;
 
 end.
 
