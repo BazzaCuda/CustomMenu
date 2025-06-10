@@ -3966,7 +3966,7 @@ object ConfigForm: TConfigForm
         TabOrder = 19
         OnClick = btnSaveClick
       end
-      object btnSelectCommandDirectory: TButton
+      object btnSelectCommandDirectory: TPanel
         Left = 461
         Top = 409
         Width = 32
@@ -3976,7 +3976,7 @@ object ConfigForm: TConfigForm
         TabOrder = 15
         OnClick = btnSelectCommandDirectoryClick
       end
-      object btnSelectCommandFile: TButton
+      object btnSelectCommandFile: TPanel
         Left = 363
         Top = 315
         Width = 32

@@ -1902,11 +1902,11 @@ object IconExplorerForm: TIconExplorerForm
         Colors.FocusedSelectionColor = 15385233
         Colors.FocusedSelectionBorderColor = 15385233
         Colors.GridLineColor = 15987699
-        Colors.HeaderHotColor = clBlack
+        Colors.HeaderHotColor = clWhite
         Colors.HotColor = clBlack
         Colors.SelectionRectangleBlendColor = 15385233
         Colors.SelectionRectangleBorderColor = 15385233
-        Colors.SelectionTextColor = clBlack
+        Colors.SelectionTextColor = clWhite
         Colors.TreeLineColor = 9471874
         Colors.UnfocusedColor = clGray
         Colors.UnfocusedSelectionColor = clWhite

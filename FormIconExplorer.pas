@@ -281,6 +281,7 @@ begin
   filterCombo.itemIndex := 0;
   tree.FileObjects := [foFolders];
   tree.TreeOptions.VETMiscOptions := [toBrowseExecuteFolder];
+  tree.TreeOptions.paintOptions   := tree.TreeOptions.PaintOptions + [toHideFocusRect]; // , toHideSelection, toAlwaysHideSelection];
 
   setColors;
 end;
@@ -361,6 +362,7 @@ begin
   treePanel.color                 := FBackgroundColor;
 
   tree.colors.FocusedSelectionColor         := FHighlightColor;
+  tree.colors.FocusedSelectionBorderColor   := FHighlightColor;
   tree.colors.UnfocusedSelectionColor       := FHighlightColor;
   tree.colors.UnfocusedSelectionBorderColor := FHighlightColor;
   tree.colors.SelectionTextColor            := clWhite;

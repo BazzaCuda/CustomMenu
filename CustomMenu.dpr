@@ -52,12 +52,13 @@ begin
 
 //  createMiniIni;
 
-//  debugPause;
   {$if BazDebugWindow} debugClear; {$endif}
 
   Application.Initialize;
   Application.MainFormOnTaskbar := TRUE;
-  Application.CreateForm(TCustomMenu, mainMenu);
+  try
+    Application.CreateForm(TCustomMenu, mainMenu); // try to get the IDE to leave this line alone!
+  finally end;
   mainMenu.ctrlClickActivate := ctrlClickToActivate;
   Application.Run;
 end.

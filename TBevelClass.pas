@@ -19,7 +19,7 @@ unit TBevelClass;
 }
 
 // override the vcl.extctrls.TBevel at compile time
-// This allows the standard TBevel to be used at design time and the custom version at compile and runtime
+// This allows the standard TBevel to be used at design time and the custom version at compile and runtime,
 // without having to install it as a descendant component in the Delphi IDE component palette
 
 interface

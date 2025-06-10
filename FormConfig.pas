@@ -28,7 +28,7 @@ uses
   Vcl.Buttons, Vcl.Imaging.pngimage, Vcl.Menus, VirtualTrees, WinAPI.ActiveX,
   Vcl.Samples.Spin,
 
-  Clipbrd, WinAPI.ShlObj, Vcl.Mask, Vcl.AppEvnts, TBevelClass;
+  Clipbrd, WinAPI.ShlObj, Vcl.Mask, Vcl.AppEvnts, TBevelClass{, TPanelClass};
 
 type
   TConfigForm = class(TForm)
@@ -48,8 +48,8 @@ type
     iconBevel: TBevel;
     btnSave: TButton;
     btnSavedChanges: TSpeedButton;
-    btnSelectCommandDirectory: TButton;
-    btnSelectCommandFile: TButton;
+    btnSelectCommandDirectory: TPanel;
+    btnSelectCommandFile: TPanel;
     btnSelectICOfile: TSpeedButton;
     btnSelectIconFromDLLExe: TSpeedButton;
     btnShowMenu: TButton;
@@ -193,12 +193,17 @@ type
     function  checkIfStillSubMenu(aNode: PVirtualNode): boolean;
     function  checkNodeParentage: boolean;
     function  checkSaves: boolean;
+    function  cursorOn: boolean;
+    function  cursorOff: boolean;
+    function  doSaves: boolean;
     function  enableSaveButton(enabled: boolean): boolean;
     function  enableSaveRegistryButton(enabled: boolean): boolean;
     function  enableShowMenuButton(enabled: boolean): boolean;
     function  getCleanCaption: string;
     function  getDirtyCaption: string;
     function  getStdIconIx(iconIx: integer): integer;
+    procedure mouseEnter(Sender: TObject);
+    procedure mouseLeave(Sender: TObject);
     function  populateBoxesFromItemData(id: PItemData): boolean;
     function  populateBoxesFromCommand(cmdFilePath: string): boolean;
     function  populateBoxesFromLnk(lnkFilePath: string): boolean;
@@ -215,7 +220,6 @@ type
     function  setDragHint(DataObject: IDataObject; const Value: string; Effect: Integer): boolean;
     function  setWindowCaption: boolean;
     function  updateMenuIcon: boolean;
-    function doSaves: boolean;
 
     //========== VCL Event Handlers ===========
   protected
@@ -470,6 +474,16 @@ end;
 procedure TConfigForm.lblHelpClick(Sender: TObject);
 begin
   shellExecute(0, 'open', 'https://github.com/BazzaCuda/CustomMenu/wiki/Getting-Started', '', '', SW_SHOW);
+end;
+
+procedure TConfigForm.mouseEnter(Sender: TObject);
+begin
+  cursorOn;
+end;
+
+procedure TConfigForm.mouseLeave(Sender: TObject);
+begin
+  cursorOff;
 end;
 
 function colorToRGBHex(const aColor: TColor): string;
@@ -971,7 +985,7 @@ begin
   pnlBackgroundColor.styleElements      := [];
   pnlHighlightColor.styleElements       := [];
   pnlInfoColor.styleElements            := [];
-  vst.styleElements := [];
+  vst.styleElements                     := [];
 
   pnlBackgroundColor.color              := FBackgroundColor;
   pnlHighlightColor.color               := FBackGroundColor;
@@ -986,6 +1000,13 @@ begin
   vst.colors.UnfocusedSelectionBorderColor  := FHighlightColor;
   vst.colors.UnfocusedColor                 := clWhite; // this is really UnfocusedTextColor
   vst.colors.SelectionTextColor             := clWhite;
+
+  btnSelectCommandDirectory.styleElements := [seFont, seBorder]; // these are now TPanels
+  btnSelectCommandFile.styleElements      := [seFont, seBorder];
+  btnSelectCommandDirectory.color         := FHighlightColor; //  clGray;
+  btnSelectCommandFile.color              := FHighlightColor; // clGray;
+
+  closeBtn.styleElements := [seFont, seBorder];
 
   vst.invalidate;
 end;
@@ -1703,6 +1724,29 @@ begin
   itemData                := TList<TItemData>.create;
   vst.NodeDataSize        := sizeOf(TItemData);
 
+  pnlBackgroundColor.OnMouseEnter         := mouseEnter;
+  pnlBackgroundColor.OnMouseLeave         := mouseLeave;
+  pnlHighlightColor.OnMouseEnter          := mouseEnter;
+  pnlHighlightColor.OnMouseLeave          := mouseLeave;
+  pnlInfoColor.OnMouseEnter               := mouseEnter;
+  pnlInfoColor.OnMouseLeave               := mouseLeave;
+  label1.OnMouseEnter                     := mouseEnter;
+  label1.OnMouseLeave                     := mouseLeave;
+  lblMenuItem.OnMouseEnter                := mouseEnter;
+  lblMenuItem.OnMouseLeave                := mouseLeave;
+  label2.OnMouseEnter                     := mouseEnter;
+  label2.OnMouseLeave                     := mouseLeave;
+  btnSelectICOfile.OnMouseEnter           := mouseEnter;
+  btnSelectICOfile.OnMouseLeave           := mouseLeave;
+  btnSelectIconFromDLLExe.OnMouseEnter    := mouseEnter;
+  btnSelectIconFromDLLExe.OnMouseLeave    := mouseLeave;
+  btnSelectCommandFile.OnMouseEnter       := mouseEnter;
+  btnSelectCommandFile.OnMouseLeave       := mouseLeave;
+  btnSelectCommandDirectory.OnMouseEnter  := mouseEnter;
+  btnSelectCommandDirectory.OnMouseLeave  := mouseLeave;
+
+  btnSelectCommandFile.styleName := '';
+
   FDragDescriptionFormat := RegisterClipboardFormat(PChar(CFSTR_DROPDESCRIPTION));
 end;
 
@@ -1721,6 +1765,16 @@ procedure TConfigForm.CreateParams(var Params: TCreateParams);
 begin
   inherited;
   Params.ExStyle := Params.ExStyle OR WS_EX_APPWINDOW; // display an icon on the taskbar for this window
+end;
+
+function TConfigForm.cursorOff: boolean;
+begin
+  screen.cursor := crDefault;
+end;
+
+function TConfigForm.cursorOn: boolean;
+begin
+  screen.cursor := crHandPoint;
 end;
 
 procedure TConfigForm.editCommandChange(Sender: TObject);
