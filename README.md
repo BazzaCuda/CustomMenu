@@ -1,6 +1,6 @@
 # CustomMenu
 
-**As of release v1.1.0 you now choose your own custom color scheme**
+**As of release v2.0.0 you now choose your own custom color scheme**
 
 ------
 
