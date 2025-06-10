@@ -407,7 +407,7 @@ procedure TIconExplorerForm.TreeInitNode(Sender: TBaseVirtualTree; ParentNode, N
 var NS: TNameSpace;
 begin
   try
-    case tree.validateNamespace(Node, NS) and NS.archive of TRUE: initialStates := initialStates + [ivsFiltered]; end;
+    case tree.validateNamespace(Node, NS) and NS.archive of TRUE: initialStates := initialStates + [ivsFiltered]; end; // is really ivsFilteredOut
   except end;
 end;
 

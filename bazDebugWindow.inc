@@ -1,1 +1,1 @@
-const BazDebugWindow = TRUE;
+const BazDebugWindow = FALSE;

@@ -171,6 +171,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="FormConfig.pas"/>
+        <DCCReference Include="TBevelClass.pas"/>
         <None Include="bazDebugWindow.inc"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

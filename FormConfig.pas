@@ -28,7 +28,7 @@ uses
   Vcl.Buttons, Vcl.Imaging.pngimage, Vcl.Menus, VirtualTrees, WinAPI.ActiveX,
   Vcl.Samples.Spin,
 
-  Clipbrd, WinAPI.ShlObj, Vcl.Mask, Vcl.AppEvnts;
+  Clipbrd, WinAPI.ShlObj, Vcl.Mask, Vcl.AppEvnts, TBevelClass;
 
 type
   TConfigForm = class(TForm)
@@ -172,6 +172,7 @@ type
     procedure pnlInfoColorClick(Sender: TObject);
     procedure btnColorDefaultsClick(Sender: TObject);
     procedure ApplicationEventsActivate(Sender: TObject);
+  protected
   private
     itemData:       TList<TItemData>;
     FDropPoint:     TPoint;
@@ -219,6 +220,7 @@ type
     //========== VCL Event Handlers ===========
   protected
     procedure CreateParams(var Params: TCreateParams); override;
+    procedure WMNCHitTest(var msg: TWMNCHitTest);  message WM_NCHITTEST;
   public
   end;
 
@@ -235,6 +237,12 @@ uses _debugWindow, VirtualTrees.Types, WinAPI.ShellAPI, system.win.comobj, FormI
 var configForm: TConfigForm;
     FCurrentIx: integer = -1; // when loading all the data and the icons, FCurrentIx and all "for i" loop variables will match for all the
                               // indexes of itemData, imageList1 and imageList3.
+
+type
+  TMyBevel = class(TBevel)
+  protected
+    procedure paint; override;
+  end;
 
 function backupRegistryKey: boolean;
 // rc doesn't actually tell us if the registry key was successfully exported, only that reg.exe was run.
@@ -974,8 +982,9 @@ begin
   vst.colors.FocusedSelectionBorderColor    := FHighlightColor;
   vst.colors.SelectionRectangleBlendColor   := FHighlightColor;
   vst.colors.SelectionRectangleBorderColor  := FHighlightColor;
-  vst.colors.UnfocusedSelectionColor        := FBackgroundColor;
-  vst.colors.UnfocusedSelectionBorderColor  := FBackgroundColor;
+  vst.colors.UnfocusedSelectionColor        := FHighlightColor;
+  vst.colors.UnfocusedSelectionBorderColor  := FHighlightColor;
+  vst.colors.UnfocusedColor                 := clWhite; // this is really UnfocusedTextColor
   vst.colors.SelectionTextColor             := clWhite;
 
   vst.invalidate;
@@ -1679,7 +1688,13 @@ begin
   setColors;
 
   vst.TreeOptions.selectionOptions  := vst.TreeOptions.selectionOptions + [toAlwaysSelectNode] - [toFullRowSelect];
-  vst.treeOptions.PaintOptions      := vst.treeOptions.paintOptions - [toUseBlendedImages]; // fuzzy [selected] images fixed!
+  vst.treeOptions.PaintOptions      := vst.treeOptions.paintOptions - [toUseBlendedImages] + [toHideFocusRect]; // fuzzy [selected] images fixed!
+
+  const bevelDelta = 8;
+  bvlColors.left    := btnSaveRegistry.left;
+  bvlColors.width   := closeBtn.left + closeBtn.width - bvlColors.left;
+  topBevel.width    := editPanel.width - bevelDelta;
+  bottomBevel.width := editPanel.width - bevelDelta;
 
   populateCommandCategories;
   comboCommandCategories.itemIndex := 0;
@@ -2071,6 +2086,50 @@ begin
                                                                       end;end;
                                         case (lowerCase(extractFileExt(vFilePath)) = '.exe') and (vDropControl.tag = 1) of TRUE: populateBoxesFromCommand(vFilePath); end;
                                       end;end;
+end;
+
+procedure TConfigForm.WMNCHitTest(var msg: TWMNCHitTest);
+begin
+  inherited;
+  // Prevent the cursor from changing when hovering over the side edges
+  case (msg.result = HTRIGHT) or (msg.result = HTLEFT) of TRUE: msg.result := HTCLIENT; end;
+end;
+
+{ TMyBevel }
+
+procedure TMyBevel.paint;
+var
+  vOuterRect: TRect;
+  vInnerRect: TRect;
+  vLineColor: TColor;
+begin
+  // Set the desired color for all bevel lines (e.g., a discrete highlight color)
+  vLineColor := clGray; // This will make all lines light, like the top/left of a bsLowered style.
+                               // You can choose clSilver, clGray, or any other TColor for discretion.
+
+  // Ensure the brush doesn't fill the bevel area, only draws lines
+  Canvas.Brush.Style := bsClear;
+
+  // Set pen properties for the lines
+  Canvas.Pen.Color := vLineColor;
+  Canvas.Pen.Width := 1; // Standard bevel line width is typically 1 pixel
+
+  // TBevel.Shape = bsBox typically draws two concentric rectangles (outer and inner)
+  // We will replicate this but with a consistent color.
+
+  // Draw the outer rectangle
+  vOuterRect := Rect(0, 0, Width, Height);
+  Canvas.Rectangle(vOuterRect);
+
+  // If the BevelWidth is greater than 1 (as it typically is for bsBox, which is 2),
+  // draw the inner rectangle as well.
+  if width > 1 then
+  begin
+    // Inset the inner rectangle by 1 pixel from the outer
+    vInnerRect := Rect(vOuterRect.Left + 1, vOuterRect.Top + 1,
+                       vOuterRect.Right - 1, vOuterRect.Bottom - 1);
+    Canvas.Rectangle(vInnerRect);
+  end;
 end;
 
 initialization

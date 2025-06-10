@@ -1,6 +1,7 @@
 object ConfigForm: TConfigForm
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Custom Menu'
   ClientHeight = 658
   ClientWidth = 828
@@ -3614,10 +3615,8 @@ object ConfigForm: TConfigForm
         Top = 0
         Width = 505
         Height = 1
-        Align = alTop
-        Shape = bsFrame
+        Shape = bsTopLine
         Visible = False
-        ExplicitTop = -8
       end
       object lblDragDropFolder: TLabel
         Left = 144
@@ -3936,14 +3935,13 @@ object ConfigForm: TConfigForm
         Top = 557
         Width = 505
         Height = 1
-        Shape = bsFrame
       end
       object bottomBevel: TBevel
         Left = 0
         Top = 631
         Width = 505
         Height = 1
-        Shape = bsFrame
+        Shape = bsTopLine
       end
       object lblEscapeToClose: TLabel
         Left = 328

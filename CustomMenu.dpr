@@ -38,7 +38,8 @@ uses
   msSettingsDef in 'msSettingsDef.pas',
   shellGuidsDef in 'shellGuidsDef.pas',
   FormHotkeys in 'FormHotkeys.pas' {HotkeyForm},
-  FormConfig in 'FormConfig.pas';
+  FormConfig in 'FormConfig.pas',
+  TBevelClass in 'TBevelClass.pas';
 
 {$R *.res}
 
