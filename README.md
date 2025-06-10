@@ -1,17 +1,26 @@
 # CustomMenu
 
-**Quick Tip**: you can delete the default menu item that `CustomMenu` creates for you:
+**As of release v1.1.0 you now choose your own custom color scheme**
+
+------
+
+**Quick Tip**: 
+- A right-click on your `Custom Menu` or _any_  of your submenus will open the `Config Dialog`
+- Also, if you right-click your desktop with no menu items defined and saved, the `Config Dialog` will open
+
+_N.B. you can delete the default menu item that `CustomMenu` created for you in previous versions:_
 
 ![custommenurightclickme](https://github.com/BazzaCuda/CustomMenu/assets/22550919/218b82cd-e348-4fe7-937f-796d4c2a2c05)
 
-A right-click on your menu or any submenu will open the Config window.
-
-Also, if you right-click your desktop with no menu items defined/saved, the Config window will open.
 
 -----------
 _NOW with system-wide [customizable] hotkey activation to allow you to display your custom menu without accessing your desktop! For information on how to activate the hotkey functionality, see the release notes for version 1.0.6 here: https://github.com/BazzaCuda/CustomMenu/releases/tag/v1.0.6_
 
-**Tip of the Day**: the easiest way to get started with `CustomMenu` is to select all the shortcuts on your desktop and simply drag and drop them onto your empty menu tree (left panel) in the config window. `CustomMenu` will create a menu item for each shortcut complete with the correct icon, starting directory and any parameters. That gets your custom menu up and running instantly with minimal effort. At a later date, if you wish, you can take your time re-arranging them and putting them into suitable submenus.
+-----------
+
+**Tip of the Day**: the easiest way to get started with `CustomMenu` is to select all the shortcuts on your desktop and simply drag and drop them onto your empty menu tree (left panel) in the `Config Dialog`. `CustomMenu` will create a menu item for each shortcut complete with the correct icon, starting directory and any parameters. That gets your custom menu up and running instantly with minimal effort. At a later date, if you wish, you can take your time re-arranging them and putting them into suitable submenus.
+
+----------
 
 NOW AVAILABLE FOR DOWNLOAD! (see https://github.com/BazzaCuda/CustomMenu/releases)
 
@@ -37,7 +46,8 @@ Comments and suggestions always welcome in https://github.com/BazzaCuda/CustomMe
 
 Examples:
 
-![submenu](https://user-images.githubusercontent.com/22550919/209433162-5023c066-b993-4f4f-88f0-2e2046cf4b4e.png)
+![image](https://github.com/user-attachments/assets/27c141b9-cdab-4a7a-b880-994c64dca567)
+
 
 
 ![example](https://user-images.githubusercontent.com/22550919/209433120-93bdfd3c-6990-4958-8581-75fc001b423a.jpg)
@@ -51,7 +61,8 @@ Examples:
 - The folder to be browsed is specified in the Directory box.
 - The Parameters box determines which files and folders will be shown from the folder (default is \*.\*).
 
-![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/202c80ed-cbc9-46f9-b3cf-d6d9783648c1)
+![image](https://github.com/user-attachments/assets/2fbb8796-4ffa-469d-b0d3-8a5be16dd42d)
+
 
 This creates a menu item called `"Browse Downloads\"`. When hovered over with the mouse, a live submenu is displayed showing the contents of the downloads folder:
 
