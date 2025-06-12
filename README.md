@@ -89,6 +89,7 @@ Then have individual "browse" commands for each drive:
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/433dcfa8-8984-4224-913c-322583e28f20)
 
 When a USB stick is inserted, a quick hover over the USB drive menu items shows which drives are mounted and which aren't:
+
 ![image](https://github.com/BazzaCuda/CustomMenu/assets/22550919/814078df-b058-44df-939f-1b95fee88e2e)
 
 Note that if you save your `Custom Menu` to the Windows Desktop Menu with "Write to Desktop Menu" (which I always do), the "browse" menu items will only work when accessed from `CustomMenu`, not from the Windows menu as Windows doesn't understand what to do with the "browse" command.
