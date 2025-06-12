@@ -60,6 +60,7 @@ const
   CM_REGISTRY_KEY     = 'SOFTWARE\Classes\DesktopBackground\shell';         // don't add the trailing \
   CM_CTRL_FILE_NAME   = 'ctrl-click';
   CM_HEIGHT_TRAY_MENU = 30;
+  CM_MIDDLE_FILE_NAME = 'middleButton';
 
   IL2_CHEVRON   = 0;
   IL2_LUASHIELD = 1;

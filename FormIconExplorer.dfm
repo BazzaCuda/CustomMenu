@@ -1902,11 +1902,11 @@ object IconExplorerForm: TIconExplorerForm
         Colors.FocusedSelectionColor = 15385233
         Colors.FocusedSelectionBorderColor = 15385233
         Colors.GridLineColor = 15987699
-        Colors.HeaderHotColor = clWhite
+        Colors.HeaderHotColor = clBlack
         Colors.HotColor = clBlack
         Colors.SelectionRectangleBlendColor = 15385233
         Colors.SelectionRectangleBorderColor = 15385233
-        Colors.SelectionTextColor = clWhite
+        Colors.SelectionTextColor = clBlack
         Colors.TreeLineColor = 9471874
         Colors.UnfocusedColor = clGray
         Colors.UnfocusedSelectionColor = clWhite
@@ -2219,7 +2219,7 @@ object IconExplorerForm: TIconExplorerForm
             Height = 15
             Align = alClient
             AutoSize = False
-            Caption = 'iconLabel'
+            Caption = 'Click an icon to view it above or double-click to use it'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWhite
             Font.Height = -11

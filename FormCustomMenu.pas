@@ -79,7 +79,8 @@ type
 
     FListBoxWndProc: TWndMethod;
 
-    FCtrlClickActivate: boolean;
+    FCtrlClickActivate:     boolean;
+    FMiddleButtonActivate:  boolean;
 
     FBackgroundColor: integer;
     FHighlightColor:  integer;
@@ -93,6 +94,7 @@ type
 
     function  buildAndShowTheMenu: boolean;
     function  buildMenu(menuType: TMenuType; extraInfo: array of string): boolean;
+    function  checkMiddleButton: boolean;
     function  closeApp: boolean;
     function  configListBox: boolean;
     function  getColors: boolean;
@@ -534,6 +536,11 @@ begin try
   except {$if BazDebugWindow} debug('exception in hookOff'); {$endif} end;
 end;
 
+function TCustomMenu.checkMiddleButton: boolean;
+begin
+  FMiddleButtonActivate := fileExists(getExePath + CM_MIDDLE_FILE_NAME);
+end;
+
 function TCustomMenu.closeApp: boolean;
 begin
   shutConfigForm;
@@ -543,7 +550,7 @@ end;
 
 function TCustomMenu.shutForm: boolean;
 begin try
-  hookOff;               // only if this is the mainMenu.
+  hookOff;               // only if this is the mainMenu
   shutSubMenu;           // and all subordinate submenus
   case listBox = NIL of TRUE: {$if BazDebugWindow} debug('lisbox = NIL'); {$endif} end;
   deleteHWND(listBox.handle);
@@ -665,12 +672,15 @@ begin
   FHook := THookInstance<TLowLevelMouseHook>.CreateHook(self);
   FHook.OnPreExecute := procedure(Hook: THook; var HookMsg: THookMessage)
     var
-      LLMouseHook: TLowLevelMouseHook;
-      isDesktop: boolean;
-      isRButton: boolean;
-      isRButtonUp: boolean;
-      isMenuWnd: boolean;
-      isButtonClick: boolean;
+      LLMouseHook:    TLowLevelMouseHook;
+      isDesktop:      boolean;
+      isRButton:      boolean;
+      isRButtonUp:    boolean;
+      isMButton:      boolean;
+      isMButtonUp:    boolean;
+      isMenuWnd:      boolean;
+      isButtonClick:  boolean;
+      isOurClick:     boolean;
       mouseWnd: HWND;
     begin
       HookMsg.Result := 0;                                                                              // default to not handling other windows' mouses. It's just rude!
@@ -689,27 +699,28 @@ begin
       isDesktop     := (mouseWnd = hDesktop) or (mouseWnd = hDefView);                                  // is it the desktop?
       isMenuWnd     := menuWnd(MouseWnd);                                                               // is it one of our menus?
 
-      // ignore mouse wheel and middle button clicks for now. We're only interested in left and right button clicks and releases.
-      isButtonClick := (HookMsg.msg = WM_LBUTTONDOWN) or (HookMsg.msg = WM_LBUTTONUP) or (HookMsg.msg = WM_RBUTTONDOWN) or (HookMsg.msg = WM_RBUTTONUP);
+      // ignore mouse wheel {and middle button} clicks for now. We're only interested in left, right and middle button clicks and releases.
+      isButtonClick := (HookMsg.msg = WM_LBUTTONDOWN) or (HookMsg.msg = WM_LBUTTONUP) or (HookMsg.msg = WM_RBUTTONDOWN) or (HookMsg.msg = WM_RBUTTONUP) or (HookMsg.msg = WM_MBUTTONDOWN) or (HookMsg.msg = WM_MBUTTONUP);
 
       case isButtonClick and NOT isMenuWnd of TRUE: shutMenus; end;                                     // if it's not for an existing menu, any click closes all existing menus (Mouse movement is ok, but not clicks)
-      case isDesktop or isMenuWnd of FALSE: EXIT; end;                                                  // Is mouse click for the desktop or one of our menus? If not, ignore it.
+      case isDesktop {or isMenuWnd} of FALSE: EXIT; end;                                                // Is mouse click for the desktop? If not, ignore it.
 
       FPT :=  LLMouseHook.HookStruct.Pt;                                                                // screen coords of mouse click
       isRButton   := (HookMsg.msg = WM_RBUTTONDOWN) OR (HookMsg.msg = WM_RBUTTONUP);                    // click or release of right mouse button?
       isRButtonUp := (HookMsg.msg = WM_RBUTTONUP);                                                      // release of right mouse button?
 
-//      case isDesktop and isRButtonUP of TRUE: begin
-//        var lvHitTestInfo: TLVHitTestInfo;
-//        lvHitTestInfo.pt := LLMouseHook.HookStruct.Pt;
-//        SendMessage(hDesktop, LVM_SUBITEMHITTEST, 0, LPARAM(@lvHitTestInfo));
-//        if (lvHitTestInfo.flags and LVHT_ONITEM) <> 0 then EXIT;
-//      end;end;
+      isMButton   := (HookMsg.msg = WM_MBUTTONDOWN) or (HookMsg.msg = WM_MBUTTONUP);                    // click of release of middle mouse button?
+      isMButtonUp := (HookMsg.msg = WM_MBUTTONUP);                                                      // release of middle mouse button?
 
-      case isDesktop and isRButton of TRUE: HookMsg.Result := 1; end;                                   // trap every click and release of the right mouse button on the desktop
-      case isDesktop and isRButtonUp and (GetKeyState(VK_SHIFT) < 0) of TRUE: closeApp; end;            // SHIFT-rightclick on desktop closes this app
-      case isDesktop and isRButtonUp and (GetKeyState(VK_MENU)  < 0) of TRUE: GREFRESH := TRUE; end;    // ALT-rightclick on desktop refreshes all menu data when the next statement executes
-      case isDesktop and isRButtonUp of TRUE: MenuTimer.Enabled := TRUE; end;                           // right-click release on desktop, show main menu
+      isOurClick := (FMiddleButtonActivate and isMButton) or (NOT FMiddleButtonActivate and isRButton);
+      case isOurClick of   TRUE: HookMsg.result := 1;                                                   // trap every click and release of the activating mouse button on the desktop
+                          FALSE: EXIT; end;                                                             // and now our watch is ended
+
+      isOurClick := (FMiddleButtonActivate and isMButtonUp) or (NOT FMiddleButtonActivate and isRButtonUp); // was our activating mouse button released?
+
+      case isOurClick and (GetKeyState(VK_SHIFT) < 0) of TRUE: closeApp; end;                           // SHIFT-ourClick on desktop closes this app
+      case isOurClick and (GetKeyState(VK_MENU)  < 0) of TRUE: GREFRESH := TRUE; end;                   // ALT-ourClick on desktop refreshes all menu data when the next statement executes
+      case isOurClick of TRUE: MenuTimer.Enabled := TRUE; end;                                          // ourClick release on desktop, show main menu
     end;
 
     hProgman := FindWindow('Progman', 'Program Manager');
@@ -770,6 +781,7 @@ begin
                          FALSE: case hasParamShowMenu of TRUE: begin Pt := getParamXY; buildAndShowTheMenu; end;end;end;
 
   case GFIRST of TRUE: checkHotkey(handle); end;
+  case GFIRST of TRUE: checkMiddleButton;   end;
 end;
 
 procedure TCustomMenu.FormDestroy(Sender: TObject);

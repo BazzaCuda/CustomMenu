@@ -406,10 +406,42 @@ begin
 end;
 
 procedure TIconExplorerForm.TreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+// only show real folders in the folder tree not archive files. Stupid Microsoft!
+// directory = true folders have the FILE_ATTRIBUTE_DIRECTORY flag set. Archive files which Windows tries to treat as folders (eg .zip, .rar) don't
+// removable = root of drive
+// nameForParsingInFolder = ::{20D04FE0-3AEA-1069-A2D8-08002B30309D} = system shell folder, eg "This PC"
+// nameParseAddress = B:\ = drive
+// nameParseAddress = B:\Backups = longer than 3 is a file or folder on the drive
 var NS: TNameSpace;
 begin
   try
-    case tree.validateNamespace(Node, NS) and NS.archive of TRUE: initialStates := initialStates + [ivsFiltered]; end; // is really ivsFilteredOut
+    {$if BazDebugWindow = FALSE}
+      case tree.validateNamespace(node, NS) of FALSE: EXIT; end;
+      var  vOK := NS.directory or NS.removable or (length(NS.NameParseAddress) = 3) or (pos('::', NS.nameForParsingInFolder) = 1); // in order of evaluation speed
+      case vOK of FALSE: initialStates := initialStates + [ivsFiltered]; end; // is really ivsFilteredOut
+    {$endif}
+    {$if BazDebugWindow}
+      case tree.validateNamespace(Node, NS) of TRUE:  begin
+                                                        debugString   ('NS.nameForParsing',           NS.NameForParsing);
+                                                        debugString   ('NS.nameForEditing',           NS.NameForEditing);
+                                                        debugString   ('NS.nameForEditingInFolder',   NS.NameForEditingInFolder);
+                                                        debugString   ('NS.nameForParsingInFolder',   NS.NameForParsingInFolder);
+                                                        debugString   ('NS.nameInFolder',             NS.NameInFolder);
+                                                        debugString   ('NS.nameNormal',               NS.NameNormal);
+                                                        debugString   ('NS.nameParseAddress',         NS.NameParseAddress);
+                                                        debugString   ('NS.nameParseAddressInFolder', NS.NameParseAddressInFolder);
+                                                        debugString   ('NS.filename',                 NS.filename);
+                                                        debugString   ('NS.className',                NS.ClassName);
+                                                        debugString   ('NS.attributesString',         NS.AttributesString);
+                                                        debugString   ('NS.fileType',                 NS.FileType);
+                                                        debugString   ('NS.shortFileName',            NS.ShortFileName);
+                                                        debugBoolean  ('NS.subFolders',               NS.SubFolders);
+                                                        debugBoolean  ('NS.subItems',                 NS.subItems);
+                                                        debugBoolean  ('NS.systemFile',               NS.systemFile);
+                                                        debugBoolean  ('NS.directory',                NS.directory);
+                                                        debugBoolean  ('NS.removable',                NS.Removable);
+      end;end;
+    {$endif}
   except end;
 end;
 
