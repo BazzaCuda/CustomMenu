@@ -20,7 +20,7 @@ _NOW with system-wide [customizable] hotkey activation to allow you to display y
 
 -----------
 
-**Tip of the Day**: the easiest way to get started with `CustomMenu` is to select all the shortcuts on your desktop and simply drag and drop them onto your empty menu tree (left panel) in the `Config Dialog`. `CustomMenu` will create a menu item for each shortcut complete with the correct icon, starting directory and any parameters. That gets your custom menu up and running instantly with minimal effort. At a later date, if you wish, you can take your time re-arranging them and putting them into suitable submenus.
+**Getting Started**: the easiest way to get started with `CustomMenu` is to select all the shortcuts on your desktop and simply drag and drop them onto your empty menu tree (left panel) in the `Config Dialog`. `CustomMenu` will create a menu item for each shortcut complete with the correct icon, starting directory and any parameters. That gets your custom menu up and running instantly with minimal effort. At a later date, if you wish, you can take your time re-arranging them and putting them into suitable submenus.
 
 ----------
 
