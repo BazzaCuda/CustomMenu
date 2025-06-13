@@ -22,7 +22,7 @@ _NOW with system-wide [customizable] hotkey activation to allow you to display y
 
 **Getting Started**: the easiest way to get started with `CustomMenu` is to select all the shortcuts on your desktop and simply drag and drop them onto your empty menu tree (left panel) in the `Config Dialog`. `CustomMenu` will create a menu item for each shortcut complete with the correct icon, starting directory and any parameters. That gets your custom menu up and running instantly with minimal effort. At a later date, if you wish, you can take your time re-arranging them and putting them into suitable submenus.
 
-Here's a declutted desktop after configuring a fully-stocked `Custom Menu`:
+Here's a non-VM, declutted desktop after configuring a fully-stocked `Custom Menu`:
 
 ![2025-06-13_104704 png customMenu desktop](https://github.com/user-attachments/assets/7f15cf5d-7d77-4320-b4d7-cd5187019d1f)
 
