@@ -12,6 +12,8 @@ _N.B. you can delete the default menu item that `CustomMenu` created for you in 
 
 ![custommenurightclickme](https://github.com/BazzaCuda/CustomMenu/assets/22550919/218b82cd-e348-4fe7-937f-796d4c2a2c05)
 
+_This was only ever meant to be an example menu item; there's no need to keep it in your menu_
+
 
 -----------
 _NOW with system-wide [customizable] hotkey activation to allow you to display your custom menu without accessing your desktop! For information on how to activate the hotkey functionality, see the release notes for version 1.0.6 here: https://github.com/BazzaCuda/CustomMenu/releases/tag/v1.0.6_
