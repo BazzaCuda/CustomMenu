@@ -10,9 +10,7 @@ object HotkeyForm: THotkeyForm
   Font.Height = -13
   Font.Name = 'Segoe UI'
   Font.Style = []
-  OldCreateOrder = False
   Position = poScreenCenter
-  PixelsPerInch = 96
   TextHeight = 17
   object Label1: TLabel
     Left = 29
@@ -35,7 +33,7 @@ object HotkeyForm: THotkeyForm
     Left = 93
     Top = 60
     Width = 121
-    Height = 19
+    Height = 25
     HotKey = 0
     Modifiers = []
     TabOrder = 0

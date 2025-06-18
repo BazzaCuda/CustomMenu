@@ -102,7 +102,7 @@ var
 begin
   case fileExists(getExePath + CM_HOTKEY_FILE_NAME) of FALSE: EXIT; end;
   FHotkeyWnd := aWND;
-  case readHotkey of  TRUE:  registerHotKey(FHotkey, FShift);
+  case readHotkey of   TRUE:  registerHotKey(FHotkey, FShift);
                       FALSE:  begin
                                 hotkeyForm := THotkeyForm.create(NIL);
                                 try
