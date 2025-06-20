@@ -722,7 +722,11 @@ begin
   vSeparatorAfterSubMenu  := FALSE;
   resetSubLevel;
   try
-    vst.iterateSubtree(NIL, saveNode, NIL);
+    try
+      vst.iterateSubtree(NIL, saveNode, NIL);
+    except
+      EXIT;
+    end;
   finally
     FSavedTree.saveToFile(getINIFileName);
     FSavedTree.free;
@@ -1838,6 +1842,14 @@ begin
   enableSaveButton(btnSave.enabled or (id.idName <> editName.text)); // has the value changed?
   id.idName := editName.text;
   vst.invalidateNode(vst.getFirstSelected);
+
+  case vst.getFirstSelected.childCount > 0 of TRUE: begin // set new subMenuName on all child nodes too!
+                                                      var vNext := vst.getFirstSelected.firstChild;
+                                                      while vNext <> NIL do begin
+                                                                              var vID: PItemData := vNext.GetData;
+                                                                              vID.idSubMenuName := id.idName;
+                                                                              vNext := vNext.nextSibling; end;end;end;
+
 end;
 
 procedure TConfigForm.editParamsChange(Sender: TObject);
