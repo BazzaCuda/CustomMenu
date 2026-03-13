@@ -1,6 +1,6 @@
 object CustomMenu: TCustomMenu
-  Left = 0
-  Top = 0
+  Left = -1000
+  Top = -1000
   BorderIcons = []
   BorderStyle = bsNone
   BorderWidth = 1
@@ -8,6 +8,8 @@ object CustomMenu: TCustomMenu
   ClientHeight = 193
   ClientWidth = 283
   Color = 2829099
+  DoubleBuffered = True
+  DoubleBufferedMode = dbmRequested
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWhite
   Font.Height = -12
@@ -951,7 +953,7 @@ object CustomMenu: TCustomMenu
     00008000000080000000000000000000000000000000F8000000F8000000F80F
     0000FC7F0000}
   KeyPreview = True
-  Position = poScreenCenter
+  Position = poDesigned
   Visible = True
   OnActivate = FormActivate
   OnCreate = FormCreate
@@ -977,6 +979,7 @@ object CustomMenu: TCustomMenu
     BevelOuter = bvNone
     BorderStyle = bsNone
     Color = 4408131
+    DoubleBufferedMode = dbmRequested
     ItemHeight = 15
     ParentShowHint = False
     ShowHint = True
@@ -995,6 +998,8 @@ object CustomMenu: TCustomMenu
     Height = 16
     Align = alBottom
     BevelOuter = bvNone
+    Color = 4408131
+    ParentBackground = False
     TabOrder = 1
     Visible = False
     object btnDown: TSpeedButton

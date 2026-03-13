@@ -89,6 +89,7 @@ type
     var FOldHintIx: integer;
     procedure listBoxWndProc(var Msg: TMessage);
 
+    procedure WMEraseBKGND(var msg: TMessage); message WM_ERASEBKGND;
     procedure WMNCPaint(var Msg: TWMNCPaint); message WM_NCPAINT;
     procedure WMHotKey(var Msg : TWMHotKey); message WM_HOTKEY;
 
@@ -175,7 +176,7 @@ begin
   case vWndRect.top + vWndHeight > vDesktopHeight of FALSE: EXIT; end;  // height: entirely visible!
 
   // It will fit on the screen but it's too low and some of it is missing
-  setWindowPos(WND, 0, vWndRect.left, vDesktopHeight - vWndHeight, 0, 0, SWP_NOSIZE);
+  setWindowPos(WND, 0, vWndRect.left, vDesktopHeight - vWndHeight, 0, 0, SWP_NOSIZE); // EXPERIMENTAL
 end;
 
 function deleteHWND(aHWND: HWND): boolean;
@@ -488,11 +489,19 @@ begin
 
   hWNDs.Add(form.listBox.handle); // delayed until now; the handle changes when the listBox has items added to it!
   resizeWindow(form);
-  form.listBox.align := alTop;
-  SetWindowPos(form.handle, HWND_TOP, form.FPt.X, form.FPt.Y, 0, 0, SWP_SHOWWINDOW OR SWP_NOSIZE);
-  SetWindowPos(form.handle, HWND_TOPMOST, form.FPt.X, form.FPt.Y, 0, 0, SWP_SHOWWINDOW OR SWP_NOSIZE);
+  form.listBox.align := alClient; // alTop;  // EXPERIMENTAL
+
+  form.listBox.visible := TRUE; // EXPERIMENTAL
+  form.left := form.FPt.x;
+  form.top  := form.FPt.Y;
+
+  // setWindowPos(form.handle, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW OR SWP_NOSIZE OR SWP_NOMOVE); // EXPERIMENTAL
+
+  //SetWindowPos(form.handle, HWND_TOP, form.FPt.X, form.FPt.Y, 0, 0, SWP_SHOWWINDOW OR SWP_NOSIZE);
+  //SetWindowPos(form.handle, HWND_TOPMOST, form.FPt.X, form.FPt.Y, 0, 0, SWP_SHOWWINDOW OR SWP_NOSIZE);
   adjustWindowPosX(form.handle);
   adjustWindowPosY(form.handle);
+  setWindowPos(form.handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_SHOWWINDOW OR SWP_NOMOVE OR SWP_NOSIZE);
 
   { NB  If the user is quick enough with the mouse after right-clicking the desktop, this keyboard event can go
         to any application the user has open. So the sent key needs to be entirely inocuous.
@@ -633,8 +642,9 @@ end;
 
 function TCustomMenu.configListBox: boolean;
 begin
-//  listBox.Color       := FBackgroundColor;
-  listBox.Align       := alTop;
+  // listBox.visible     := FALSE;
+  // listBox.Color       := FBackgroundColor;
+  listBox.Align       := alClient; //   alTop; // EXPERIMENTAL
   listBox.BorderStyle := bsNone; // We draw a subtle border in WMNCPaint
   listBox.BevelInner  := bvNone;
   listBox.BevelOuter  := bvNone;
@@ -749,6 +759,7 @@ begin
     Params.ExStyle    := Params.ExStyle AND (NOT WS_EX_APPWINDOW);
     Params.WndParent  := Application.Handle;
   end;end;
+  //params.style := Params.style and NOT WS_VISIBLE;
 end;
 
 procedure TCustomMenu.menuExitClick(Sender: TObject);
@@ -765,7 +776,8 @@ end;
 
 procedure TCustomMenu.FormCreate(Sender: TObject);
 begin
-  left := -1000; position := poDesigned; // prevent the window from flashing momentarily on the desktop
+  // left and top are now set to -1000 in the Object Inspector
+//  left := -1000; {position := poDesigned;} // prevent the window from flashing momentarily on the desktop
   itemData  := TList<TItemData>.Create;
   MenuID    := newMenuID;
   case GFIRST of TRUE: ShowTrayIcon(trayIcon); end;
@@ -816,6 +828,7 @@ begin
   FHighlightColor   := getHighlightColor;
   FInfoColor        := getInfoColor;
   listBox.Color     := FBackgroundColor;
+  bottomPanel.color := FBackgroundColor;
 end;
 
 procedure TCustomMenu.listBoxDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
@@ -850,6 +863,8 @@ begin
                                             until listBox.canvas.textWidth(vText) <= vTextSpace;
                                             setLength(vText, length(vText) + 3);
                                             vText[length(vText)] := '.'; vText[length(vText) - 1] := '.'; vText[length(vText) - 2] := '.'; end;end;
+
+  listBox.Canvas.Brush.Color := listBox.Color; // EXPERIMENTAL
 
   case odSelected in State of TRUE: begin
                                       listBox.Canvas.Brush.Color := FHighlightColor;
@@ -998,6 +1013,11 @@ begin
   buildAndShowTheMenu;
 end;
 
+procedure TCustomMenu.WMEraseBKGND(var msg: TMessage);
+begin
+  msg.result := 1;
+end;
+
 procedure TCustomMenu.WMHotKey(var Msg: TWMHotKey);
 begin
   FPT.X := (getscreenWidth - (width div 2)) div 2;
@@ -1013,7 +1033,7 @@ var
   OldPen: hPen;
   OldBrush: hBrush;
 begin
-  inherited;
+//  inherited;
   dc := GetWindowDC(Handle);
   Msg.Result := 1;
   Pen := CreatePen(PS_SOLID, 1, RGB(140, 140, 140));
@@ -1023,7 +1043,7 @@ begin
   SelectObject(dc, OldBrush);
   SelectObject(dc, OldPen);
   DeleteObject(Pen);
-  ReleaseDC(Handle, Canvas.Handle);
+  ReleaseDC(Handle, dc);
 end;
 //
 //procedure TCustomMenu.WMXYMessage(var Msg: TMessage);

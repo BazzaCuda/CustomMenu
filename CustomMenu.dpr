@@ -40,11 +40,10 @@ uses
   FormHotkeys in 'FormHotkeys.pas' {HotkeyForm},
   FormConfig in 'FormConfig.pas',
   TBevelClass in 'TBevelClass.pas';
-
 {$R *.res}
 
 begin
-//  ReportMemoryLeaksOnShutdown := TRUE;
+  {$if BazDebugWindow} ReportMemoryLeaksOnShutdown := TRUE; {$endif}
 
   case hasParamSingle and alreadyRunning of TRUE: begin
                                                     case hasParamShowMenu of TRUE: findCustomMenu; end;
@@ -57,7 +56,8 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := TRUE;
   try
-    Application.CreateForm(TCustomMenu, mainMenu); // try to get the IDE to leave this line alone!
+    Application.CreateForm(TCustomMenu, mainMenu);
+  // try to get the IDE to leave this line alone!
   finally end;
   mainMenu.ctrlClickActivate := ctrlClickToActivate;
   Application.Run;
