@@ -20,7 +20,21 @@ program CustomMenu;
 {$WEAKLINKRTTI ON}   // don't include extended RTTI for unused types
 {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])} // don't include extended RTTI for used types
 {$M-} // enables the published keyword
+
+
+{$ifopt D+}
+  {$define useMadExcept}
+{$endif}
+
 uses
+  {$ifdef useMadExcept}
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
+  {$endif}
+
   Vcl.Forms,
   FormCustomMenu in 'FormCustomMenu.pas' {CustomMenu},
   Winapi.Hooks in 'Winapi.Hooks.pas',
@@ -42,16 +56,42 @@ uses
   TBevelClass in 'TBevelClass.pas';
 {$R *.res}
 
+
+procedure setupRunMode;
 begin
-  {$if BazDebugWindow} ReportMemoryLeaksOnShutdown := TRUE; {$endif}
+  {$if BazDebugWindow} debugClear;
+
+    {$ifndef useMadExcept}
+    reportMemoryLeaksOnShutdown := TRUE;
+    debugBoolean('reportMemoryLeaksOnShutdown', reportMemoryLeaksOnShutdown);
+    {$endif}
+
+  {$endif}
+
+  {$ifdef useMadExcept}
+//  madExcept.SetLeakReportFile(extractFilePath(paramStr(0)) + 'madExcept.log'); // this suppresses the dialog
+  madExcept.reportLeaks := TRUE;
+  madExcept.showNoLeaksWindow(TRUE);
+  madExcept.dontHookThreads;
+
+  var vThreadList := madExcept.getThreadList;
+
+  for var i := low(vThreadList) to high(vThreadList) do
+    madExcept.thisIsNoLeak(vThreadList[i]);
+
+//  madExcept.HookThreads;
+  {$endif}
+end;
+
+
+begin
+  setupRunMode;
 
   case hasParamSingle and alreadyRunning of TRUE: begin
                                                     case hasParamShowMenu of TRUE: findCustomMenu; end;
                                                     EXIT; end;end;
 
 //  createMiniIni;
-
-  {$if BazDebugWindow} debugClear; {$endif}
 
   Application.Initialize;
   Application.MainFormOnTaskbar := TRUE;
